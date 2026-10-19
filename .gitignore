@@ -1,0 +1,94 @@
+# ==============================================================================
+#
+# Built PDFs are NOT tracked. CI compiles src/*.typ and publishes the PDFs.
+# Reference PDFs we did not build are negated below and stay tracked.
+#
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Per-user
+# ------------------------------------------------------------------------------
+/notes/
+
+# ------------------------------------------------------------------------------
+# Typst build output
+# ------------------------------------------------------------------------------
+
+# Compiled documents. CI builds these from src/*.typ.
+# If you ever render previews locally (typst compile --format png|svg),
+# send them somewhere outside the repo rather than ignoring *.png here.
+*.pdf
+
+# Local typst package tree, if one is ever vendored here
+.typst/
+
+# ------------------------------------------------------------------------------
+# Office and admin documents
+# ------------------------------------------------------------------------------
+~$*
+.~lock.*#
+*.wbk
+*.xlk
+*.laccdb
+*.asd
+
+
+# ------------------------------------------------------------------------------
+# Windows
+# ------------------------------------------------------------------------------
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.stackdump
+
+
+# ------------------------------------------------------------------------------
+# macOS
+# ------------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.fseventsd
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+
+# ------------------------------------------------------------------------------
+# Linux
+# ------------------------------------------------------------------------------
+*~
+.directory
+.Trash-*
+.nfs*
+
+
+# ------------------------------------------------------------------------------
+# Editors and IDEs
+# ------------------------------------------------------------------------------
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+
+# ------------------------------------------------------------------------------
+# Secrets
+# ------------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.*
