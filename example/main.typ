@@ -252,4 +252,4 @@ See the #ilink(<appendix>)[Appendix] for examples.
 
 #include "./sample-deck.typ"
 
-#appendix[= Appendix <appendix>]
+#appendix(include "./appendix.typ")
