@@ -250,4 +250,6 @@ This marks the material as appendix content and freezes slide numbering.
 
 See the #ilink(<appendix>)[Appendix] for examples.
 
+#include "./sample-deck.typ"
+
 #appendix[= Appendix <appendix>]
