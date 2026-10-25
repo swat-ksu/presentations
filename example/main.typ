@@ -1,4 +1,4 @@
-#import "../template.typ": *
+#import "../swat-doc.typ": *
 
 #import touying: *
 #import theme: *
@@ -8,7 +8,11 @@
 #import "@preview/codly:2.0.0" as codly
 #import "@preview/codly-languages:0.1.10": codly-languages
 
-#show: codly.theme("github-light")
+#show: codly.theme(
+  "clean",
+  fill: swat-colors.neutral-lightest.darken(2%),
+  radius: 5pt,
+)
 #show: codly.lang-set_(
   languages: (
     // icon-only language display by overwriting the name with ""
@@ -20,8 +24,8 @@
 #show raw.where(block: true): codly.new
 
 #show: swat-doc.with(
-  title: [Example / Documentation],
-  subtitle: [How to use _The Template_],
+  title: [Example Presentation & Documentation],
+  subtitle: [How to make your own slides, with _Typst_],
   authors: author(
     "Adrian Valcarcel-Schott",
     gh: "avalsch",
@@ -30,246 +34,220 @@
 
 = Getting Started
 
-```typ
-#import "../template.typ": *
+Here's how to get started:
 
-#show: swat-doc.with(
-  title: [My Presentation],
-  authors: author("Your-Name Here")
+#v(0.5em)
+
+#codly.new(
+  ```sh
+  # 1. clone the repo.
+  git clone https://github.com/swat-ksu/presentations
+
+  # 2. change directories into the repo you just cloned.
+  cd presentations/
+
+  # 3. make a copy of the template folder for your presentation.
+  #    (replace <YOUR_PRES_NAME> with a name for your presentation)
+  cp template/ <YOUR_PRES_NAME> -r
+
+  # 4. start editing <YOUR_PRES_NAME>/main.typ in your favorite ide.
+  #    make sure to update the relevant information like the title,
+  #    subtitle, authors, etc.
+  ```,
+  number-enabled: false,
 )
 
-= Getting Started
+== Starter template content
 
-Write some content, you got this!
+#v(0.5em)
 
-#pause
+#raw(read("../template/main.typ"), lang: "typst", block: true)
 
-Believe in yourself!
+= Helpful References
 
-```
+#set terms(spacing: 2.6em)
 
-= A Small Sample Deck
+/ Typst Tutorial: the best place to start if you're new to Typst. #ilink("https://typst.app/docs/tutorial/")[link]
 
-== A slide with a list
+/ Typst Documentation: language, syntax, and standard library. #ilink("https://typst.app/docs/")[link]
 
-Metropolis keeps content slides clean and gives the title room to breathe.
+/ Typst Universe: discover packages for any use case. #ilink("https://typst.app/universe/")[link]
 
-- Use a short, descriptive slide title
-- Keep each point focused on one idea
-- Use *bold* text to make the key takeaway easy to scan
-
-#pause
-
-- Add detail progressively when presenting live
-
-== Two-column layout
-
-#grid(
-  columns: (1fr, 1fr),
-  gutter: 1.5em,
-  [
-    === The problem
-
-    Important information is often spread across too many places.
-
-    #v(0.5em)
-
-    *Finding the signal takes time.*
-  ],
-  [
-    === The approach
-
-    Bring the relevant information together, then make the next step clear.
-
-    #v(0.5em)
-
-    *Make the useful action obvious.*
-  ],
-)
-
-== A little data
-
-#align(center)[
-  #text(1.2em)[A simple relationship]
-
-  #v(1em)
-
-  $ y = beta_0 + beta_1 x + epsilon $
-
-  #v(1em)
-
-  #table(
-    columns: 3,
-    align: center,
-    fill: (x, y) => if y == 0 { swat-colors.primary.lighten(95%) },
-    stroke: none,
-    inset: 0.4em,
-    table.header([*Group*], [*Before*], [*After*]),
-    table.hline(),
-    [A], [42], [68],
-    [B], [37], [59],
-    [C], [51], [74],
-  )
-]
-
-== Displaying code
-
-This example template also loads Codly, so you get prettier code.
-
-```typ
-#let greet(name) = [Hello, #name!]
-
-// fun fact, these are all programming languages too!
-#for person in ("Ada", "Julia", "Alice") {
-  greet(person)
-}
-```
-
-You can use lots of languages! For example, Python and Assembly
-
-```py
-name = input('What is your name?\n')
-print (f'Hi, {name}.')
-```
-
-#v(0.6em)
-
-```asm
-mov rax, 60    ; sys_exit
-mov rdi, 0     ; exit code 0 (success)
-syscall
-```
-
-== One key takeaway
-
-#align(center + horizon)[
-  #utils.fit-to-width[*Good slides make the main idea unmistakable.*]
-
-  #v(1em)
-
-  Start with the message. Add only the detail that helps your audience act on it.
-]
+/ Touying Documentation: presentation concepts, functions, and examples. #ilink("https://touying-typ.github.io/")[link]
 
 = Useful Components
 
-== Outline slide
+== Structure a presentation
 
-The Metropolis theme provides an outline slide that picks up the presentation's headings. It can be placed wherever an agenda or recap is useful.
+Use heading-based slides for most content. Touying turns each `==` heading into a slide, so the source stays easy to scan and reorder.
 
-#outline-slide(title: [Today's Outline], level: 1, numbered: (false,))
-
-== Focus slide
-
-#focus-slide[
-  A high-impact message for a transition or key result.
-]
-
-== Explicit slide
-
-Most slides here are made from `==` headings. The lower-level `slide` function is useful when you want explicit control of the title or layout.
-
-#codly.new(
-  ```typ
-  #slide(title: [== Created with `#slide`], composer: (1fr, 1fr))[
-    Left-hand content.
-  ][
-    Right-hand content.
-  ]
-  ```,
-)
-
-#slide(title: [== Created with `#slide`], composer: (1fr, 1fr))[
-  Left-hand content.
-][
-  Right-hand content.
-]
-
-== Slide layout components
-
-#cols(columns: (1fr, 1fr), gutter: 1.5em)[
-  *`cols`*
-
-  A Touying wrapper for arranging slide content in columns.
-][
-  *`side-by-side`*
-
-  An alias for `cols`, handy when comparing two things.
-]
-
-== Adaptive columns and alignment
-
-/ Adaptive columns: lays out content in columns that adapt to the available space.
-
-#v(0.4em)
-
-#components.adaptive-columns(components.progressive-outline(title: none))
-
-*Left and right*
-
-#components.left-and-right([Label on the left], [A value on the right])
-
-== More reveal patterns
-
-Touying has more reveal controls than `#pause`:
-
-- #uncover("2-")[`uncover`: reveal from step 2]
-- #only("1")[`only`: show only on step 1]
-- #alternatives[First alternative][Second alternative]
+When a slide needs a custom title or layout, use `#slide` directly:
 
 #v(1em)
 
-#item-by-item[
-  - `item-by-item` reveals these lines in sequence.
+```typ
+#slide(title: [A custom slide], composer: (1fr, 1fr))[
+  First content area.
+][
+  Second content area.
+]
+```
 
-  - A second item appears on the next step.
+#slide(title: [A custom slide], composer: (1fr, 1fr))[
+  First content area.
+][
+  Second content area.
 ]
 
-#meanwhile
+== Outline slide
 
-This appears on the parallel reveal track after the prior items.
+An outline slide helps orient the audience at the start of a section or recap its structure:
 
-== Speaker notes
+#outline-slide(
+  title: [Today's Outline],
+  level: 1,
+  numbered: (false,),
+)
 
-Notes are hidden from the audience's slide and can be displayed in a presenter view when notes output is enabled.
+== Arrange content
 
-#speaker-note[
-  Example note: pause here, ask for questions, then move on to the demo.
-]
-
-== Article-only content
-
-Touying can export this presentation as an article with `--input export=article`. Content marked `article-only` is intended for the article output rather than the slide deck.
-
-#article-only[
-  This paragraph is supplemental article text. It will not appear in normal slide export.
-]
-
-== Using an appendix
-
-The appendix helper marks the following material as appendix content.
+Use columns to compare ideas or pair text with an image. Keep both sides concise.
 
 #v(2em)
 
-Slide numbering is frozen there.
+#cols(columns: (1fr, 1fr), gutter: 1.5em)[
+  *Before*
 
-#v(2em)
+  Details are spread across many sources.
 
-See the #link(<appendix>, underline[*Appendix*#sym.arrow.tr]) section for an example.
+  Finding the full picture takes time.
+][
+  *After*
 
-= References
+  Key details are together in one place.
 
-There are many great references that can help you when you're making your own Typst documents.
-
-#appendix[
-  = Appendix <appendix>
-
-  This is an example appendix slide, included to show the `appendix` helper.
-
-  #v(1.5em)
-
-  #lorem(42)
-
-  #v(1.5em)
-
-  #lorem(4)
+  The next step is easy to identify.
 ]
+
+== Reveal information progressively
+
+Keep both headings visible; reveal one item left, then one right:
+
+#v(1em)
+
+// you can also do this with a grid and #pause
+
+#cols(columns: (1fr, 1fr), gutter: 1.5em)[
+  *First: identify the problem*
+
+  #uncover("2-")[- Information is scattered.]
+
+  #uncover("4-")[- Important details are easy to miss.]
+
+  #uncover("6-")[- Updates are hard to track.]
+][
+  *Then: show the response*
+
+  #uncover("3-")[- Bring the details together.]
+
+  #uncover("5-")[- Make the next step clear.]
+
+  #uncover("7-")[- Keep everyone on the same page.]
+]
+
+#v(3em)
+
+Use `#pause` to reveal content step by step.
+
+#v(1em)
+
+For more control over when individual items appear, use `#uncover`.
+
+== Replace content with alternatives
+
+Use `alternatives` to choose one version instead of calling `only` repeatedly:
+
+#v(1em)
+
+#alternatives[Call `#only` multiple times #sym.crossmark][Use `#alternatives` function #sym.checkmark] for choosing one of the alternatives.
+
+#v(1em)
+
+See #ilink("https://touying-typ.github.io/docs/tutorials/dynamic/complex#alternatives")[Touying's alternatives documentation] for more options.
+
+== A proof by contradiction
+
+#v(2fr)
+
+Pauses can build an argument or a calculation:
+
+#v(4fr)
+
+Assume, for contradiction, that $sqrt(2) = frac(style: "skewed", p, q)$ in lowest terms.
+
+#pause
+
+Then, squaring both sides gives $p^2 = 2q^2$, so $p$ is even.
+
+#pause
+
+Let $p = 2k$.
+
+#pause
+
+Substituting $p = 2k$ gives:
+
+$ 4k^2 = 2q^2 quad ==> quad q^2 = 2k^2 $
+
+#pause
+
+Thus $q$ is even as well.
+
+#pause
+
+Now both $p$ and $q$ are even, contradicting that $frac(style: "skewed", p, q)$ was in lowest terms.
+
+#pause
+
+Therefore, $sqrt(2)$ is irrational. #h(1fr) #text(font: "New Computer Modern Math", sym.qed)
+
+#v(3fr)
+
+== Euler's formula
+
+Expand the exponential, then collect its real and imaginary terms:
+
+$
+  e^(i x) & = sum_(n=0)^infinity frac((i x)^n, n!) \
+    pause & = 1 + i x - frac(x^2, 2!) - i frac(x^3, 3!) + frac(x^4, 4!) + dots.c \
+    pause & = (1 - frac(x^2, 2!) + frac(x^4, 4!) - dots.c) + i (x - frac(x^3, 3!) + dots.c) \
+    pause & = cos x + i sin x
+$
+
+#pause
+
+Set $x = pi$. Since $cos pi = -1$ and $sin pi = 0$:
+
+$ e^(i pi) = -1 + i dot 0 = -1 $
+
+#pause
+
+Therefore, $ e^(i pi) + 1 = 0 $
+
+== Emphasize a message
+
+Use a focus slide to give an important takeaway room to stand out.
+
+#focus-slide[
+  Make the next step obvious.
+]
+
+== Add appendix material
+
+Put supporting details after the main presentation with `#appendix`.
+
+This marks the material as appendix content and freezes slide numbering.
+
+See the #ilink(<appendix>)[Appendix] for examples.
+
+#appendix[= Appendix <appendix>]
