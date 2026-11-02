@@ -107,7 +107,7 @@
   - Most CS and software courses at KSU focused on theory and general skills/knowledge
   - Little room for practical application
   - Tools and frameworks are deliberately de-emphasized
-  - Lowerclassmen never touch real systems
+  - Lowerclassmen don't work on real systems
 ]
 
 #v(1fr)
