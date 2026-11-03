@@ -1,10 +1,19 @@
-Using typst to create slides that can easily be shared and viewed on 
-GitHub. They also look quite clean.
+# SwAT's Presentations
 
-Easiest way to compile and make your own is to download the 
-Tinymist Typst extenstion on vscode and then begin with a template from:
+SwAT exists to educate its members. We kickstart and supplement the process with in-person presentations (with slides). What better way to work on slides than with `typst`, which is a "markup-based typsetting system". Slides may be made in plain text files and then stored and viewed on GitHub easily. It also provides an excellent learning experience for using version control and editing your documents. 
 
-https://typst.app/
+## Getting started 
 
-Check out the *.typ files before starting since there are some
-useful pre-defined styling objects that can speed up the process.
+`@avalsch` has created a superb typst `swat-doc.typ` format and example/tutorial. 
+
+Please refer to that and the typst documentation before setting out!
+
+---
+
+The easiest way to compile and natively preview your typst documents is to download the `Tinymist Typst` extenstion on vscode
+
+To manually compile a pdf of your presentation, run:
+
+```bash
+$ typst compile <your pres>/main.typ --root ../
+```

@@ -88,9 +88,7 @@
 #v(1fr)
 
 #quote(attribution: [MIT News --- February 28, 2025])[
-  The incredible competition performance is just one manifestation of MIT's
-  vibrant community of students who love doing math and discussing math with
-  each other, students who through their hard work in this environment excel in
+  The incredible competition performance is just one manifestation of MIT's vibrant community of students who love doing math and discussing math with each other, students who through their hard work in this environment excel in
   ways beyond competitions, too.
 ]
 

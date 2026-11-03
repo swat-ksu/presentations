@@ -156,19 +156,6 @@
   )
 
   touying.slides-only(theme.title-slide(author: _authors(authors)))
-
-  set quote(block: true)
-  show quote.where(block: true): it => block(
-    width: 100%, inset: (x: 0.8em, y: 0.6em), radius: (right: 3pt),
-    fill: swat-colors.tertiary.lighten(90%),
-    stroke: (left: 3pt + swat-colors.tertiary),
-    it,
-  )
-  show terms.item: it => block(
-    width: 100%, inset: (x: 0.8em, y: 0.6em), radius: (right: 3pt),
-    fill: swat-colors.primary.lighten(88%),
-    stroke: (left: 3pt + swat-colors.primary),
-  )[#strong(it.term) \ #it.description]
-
+  
   body
 }
