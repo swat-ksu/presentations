@@ -14,6 +14,6 @@ The easiest way to compile and natively preview your typst documents is to downl
 
 To manually compile a pdf of your presentation, run:
 
-```bash
-$ typst compile <your pres>/main.typ --root ../
+```sh
+typst compile <your-pres>/main.typ --root ../
 ```
