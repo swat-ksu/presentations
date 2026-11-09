@@ -6,6 +6,8 @@
 #import "@preview/conch:0.1.0" as conch: system, terminal-block
 #import "@preview/pinit:0.2.2": *
 
+#import "util.typ": pinit-label
+
 #show: swat-doc.with(
   title: [Intro to Your Shell],
   authors: (
@@ -39,8 +41,8 @@
   title-fg: swat-colors.neutral-lightest,
   title-bg: swat-colors.secondary,
 
-  cursor: rgb("#f6f8fa"),
-  bg: rgb("#f6f8fa"),
+  cursor: swat-colors.neutral-lightest.darken(5%),
+  bg: swat-colors.neutral-lightest.darken(5%),
   fg: rgb("#1f2328"),
 
   prompt-user: terminal-ansi.blue,
@@ -148,7 +150,7 @@ A *shell* is an interface that allows access to OS functionality and other progr
 #pause
 
 #terminal[
-  ```
+  ```bash
   echo hello
   ```
 ]
@@ -183,7 +185,7 @@ A *shell* is an interface that allows access to OS functionality and other progr
   ),
   width: 100%,
 )[
-  ```
+  ```bash
   ls
 
   ls -a
@@ -193,86 +195,71 @@ A *shell* is an interface that allows access to OS functionality and other progr
 ---
 
 #align(center)[
-  #set text(size: 1.5em)
-  #show raw: set text(size: 1.4em)
+  #set text(size: 1.2em)
+
   #show raw: it => {
-    show regex("\d"): it => pin(eval(it.text.slice(0)))
+    set text(size: 2.2em)
+    show regex("\[\d*\]"): it => pin(eval(it.text.slice(1, -1)))
     it
   }
 
-  `1git2 3-c "John Doe"4 5commit6 7-m 'My message'8`
+  `[1]git[2] [5]commit[6] [7]-a[8] [9]-m 'My message'[0]`
 
-  #let pinit-highlight = pinit-highlight.with(dy: -1.4em, extended-height: 1.8em)
+  #pinit-label(swat-colors.secondary, (1, 2), top, dx: 70%)[command]
 
-  #let label(it, color: black) = block(outset: 0.5em, stroke: 3pt + color, radius: 10pt, it)
+  #pinit-label(swat-colors.tertiary, (5, 6), bottom, dx: -40%)[subcommand]
 
-  #context {
-    let (width, height) = std.measure([command])
+  #pinit-label(
+    swat-colors.primary-light,
+    (7, 8),
+    bottom,
+    dx: 100%,
+    fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
+  )[subcommand flag]
 
-    pinit-highlight(1, 2, fill: black.transparentize(80%))
-
-    pinit-point-from(
-      (1, 2),
-      pin-dy: -50pt,
-      offset-dx: 5pt,
-      offset-dy: -100pt,
-      body-dx: -5pt,
-      body-dy: -height - 15pt,
-      label(color: black)[command],
-    )
-  }
-
-  #context {
-    let red = red.darken(20%)
-
-    let (width, height) = std.measure([command argument])
-
-    pinit-highlight(3, 4, fill: red.transparentize(80%).saturate(120%))
-
-    pinit-point-from(
-      (3, 4),
-      offset-dx: 5pt,
-      offset-dy: 60pt,
-      body-dx: -width / 2,
-      body-dy: 15pt,
-      fill: red,
-      label(color: red)[command argument],
-    )
-  }
-
-
-  #context {
-    let blue = blue.darken(20%)
-
-    let (width, height) = std.measure([subcommand])
-
-    pinit-highlight(5, 6, fill: blue.transparentize(80%).saturate(120%))
-
-    pinit-point-from(
-      (5, 6),
-      pin-dy: -50pt,
-      offset-dx: 5pt,
-      offset-dy: -100pt,
-      body-dx: -2 * width / 3,
-      body-dy: -height - 15pt,
-      fill: blue,
-      label(color: blue)[subcommand],
-    )
-  }
-
-  // #context {
-  //   pinit-point-from(
-  //     (2, 1, 1),
-  //     offset-dx: -20pt,
-  //     body-dx: -std.measure([Command]).width,
-  //   )[Command]
-  // }
-
-  // #pinit-point-from(
-  //   (3, 2),
-  // )[Argument]
+  #pinit-label(
+    swat-colors.primary,
+    (9, 0),
+    top,
+    dx: -30%,
+    fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
+  )[subcommand flag (with argument)]
 ]
 
+---
+
+#terminal(
+  system: system(
+    files: (
+      "foo.txt": (content: "", mode: 644),
+      "bar.py": (content: "", mode: 644),
+      "baz.sh": (
+        content: ```bash
+        #!/usr/bin/bash
+
+        echo "Hello, World"
+        ```.text,
+        mode: 755,
+      ),
+    ),
+  ),
+  font: (font: "Fira Mono", size: 1em),
+  width: 100%,
+)[
+  ```bash
+  ls
+
+  ls -a
+
+  ls -lah
+
+  ./baz.sh
+
+  ls /
+
+  pwd
+  ```
+]
 
 // motivation?
 // simulate actual program execution
