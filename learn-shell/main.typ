@@ -54,23 +54,29 @@
 #let term-config = (
   system: system(),
   user: "swat",
-  font: (font: "Fira Mono", size: 1.4em),
+  font: (font: "Fira Mono", size: 1em, weight: "regular"),
   chrome: (title, t, f) => block(fill: t.title-bg, width: 100%, inset: 8pt, {
     align(center, text(..f, fill: t.title-fg)[Terminal --- #title])
   }),
-  style: (inset: (top: -0.4em, rest: 0.8em)),
   theme: terminal-theme,
   show-cursor: false,
 )
 
-#let terminal-block = terminal-block.with(..term-config)
+#let terminal-block = terminal-block.with(
+  style: (inset: (top: -0.4em, rest: 0.8em)),
+  ..term-config,
+)
 
 #let terminal-frames = terminal-frames.with(
   ..term-config,
-  style: (inset: (rest: 0.8em)),
 )
 
 #let term-center(it) = align(center, block(align(top + left, it)))
+
+// kinda hacky, overrides conch's "bold" font weight to be
+// a more reasonable "medium" so that bolded content doesn't
+// look horribly large and out of place
+#show text.where(weight: "bold"): set text(weight: "medium")
 
 
 = Getting Started
@@ -159,7 +165,8 @@ A *shell* is an interface that allows access to OS functionality and other progr
 ---
 
 #let frames = terminal-frames(
-  commands: ("ls", "ls -a", "pwd", ""),
+  commands: ("cd /", "ls", "ls -a", "cd home", "pwd", ""),
+  mode: "key-frames",
   height: 400pt,
 )
 
@@ -253,7 +260,6 @@ A *shell* is an interface that allows access to OS functionality and other progr
       ),
     ),
   ),
-  font: (font: "Fira Mono", size: 1em),
   width: 100%,
 )[
   ```bash
