@@ -3,7 +3,7 @@
 #import touying: *
 #import theme: *
 
-#import "@preview/conch:0.1.0" as conch: system, terminal-block
+#import "@preview/conch:0.1.0" as conch: system, terminal-block, terminal-frames
 #import "@preview/pinit:0.2.2": *
 
 #import "util.typ": pinit-label
@@ -41,7 +41,6 @@
   title-fg: swat-colors.neutral-lightest,
   title-bg: swat-colors.secondary,
 
-  cursor: swat-colors.neutral-lightest.darken(5%),
   bg: swat-colors.neutral-lightest.darken(5%),
   fg: rgb("#1f2328"),
 
@@ -52,25 +51,27 @@
   ansi: terminal-ansi,
 )
 
-#let terminal(..args) = align(
-  center,
-  block(
-    align(
-      top + left,
-      terminal-block(
-        system: system(),
-        user: "swat",
-        font: (font: "Fira Mono", size: 1.4em),
-        chrome: (title, t, f) => block(fill: t.title-bg, width: 100%, inset: 8pt, {
-          align(center, text(..f, fill: t.title-fg)[Terminal --- #title])
-        }),
-        style: (inset: (top: -0.4em, rest: 0.8em)),
-        theme: terminal-theme,
-        ..args,
-      ),
-    ),
-  ),
+#let term-config = (
+  system: system(),
+  user: "swat",
+  font: (font: "Fira Mono", size: 1.4em),
+  chrome: (title, t, f) => block(fill: t.title-bg, width: 100%, inset: 8pt, {
+    align(center, text(..f, fill: t.title-fg)[Terminal --- #title])
+  }),
+  style: (inset: (top: -0.4em, rest: 0.8em)),
+  theme: terminal-theme,
+  show-cursor: false,
 )
+
+#let terminal-block = terminal-block.with(..term-config)
+
+#let terminal-frames = terminal-frames.with(
+  ..term-config,
+  style: (inset: (rest: 0.8em)),
+)
+
+#let term-center(it) = align(center, block(align(top + left, it)))
+
 
 = Getting Started
 
@@ -149,11 +150,23 @@ A *shell* is an interface that allows access to OS functionality and other progr
 #v(2em)
 #pause
 
-#terminal[
+#term-center(terminal-block[
   ```bash
-  echo hello
+  echo hello world!
   ```
-]
+])
+
+---
+
+#let frames = terminal-frames(
+  commands: ("ls", "ls -a", "pwd", ""),
+  height: 400pt,
+)
+
+#slide(
+  repeat: frames.len(),
+  self => term-center(frames.at(self.subslide - 1)),
+)
 
 == Command Anatomy
 
@@ -177,7 +190,7 @@ A *shell* is an interface that allows access to OS functionality and other progr
 
 #v(4em)
 
-#terminal(
+#term-center(terminal-block(
   system: system(
     files: (:
       ..("foo.txt", "bar.py", "baz.typ").map(k => (k, "")).to-dict(),
@@ -190,7 +203,7 @@ A *shell* is an interface that allows access to OS functionality and other progr
 
   ls -a
   ```
-]
+])
 
 ---
 
@@ -228,7 +241,7 @@ A *shell* is an interface that allows access to OS functionality and other progr
 
 ---
 
-#terminal(
+#term-center(terminal-block(
   system: system(
     files: (
       "foo.txt": (content: "", mode: 644),
@@ -259,7 +272,7 @@ A *shell* is an interface that allows access to OS functionality and other progr
 
   pwd
   ```
-]
+])
 
 // motivation?
 // simulate actual program execution
