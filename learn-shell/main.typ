@@ -163,10 +163,7 @@ A *shell* is an interface that allows access to OS functionality and other progr
   height: 400pt,
 )
 
-#slide(
-  repeat: frames.len(),
-  self => term-center(frames.at(self.subslide - 1)),
-)
+#alternatives(..frames.map(term-center))
 
 == Command Anatomy
 
