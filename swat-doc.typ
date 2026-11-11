@@ -129,7 +129,7 @@
   set document(title: title, author: authors.map(a => a.name))
 
   show: metropolis-theme.with(
-    aspect-ratio: "3-2",
+    aspect-ratio: "16-9",
     footer: self => self.info.institution,
     touying.config-info(
       title: smallcaps(title),
