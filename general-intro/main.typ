@@ -49,6 +49,8 @@ I:
 - was involved with Student Managed Investment Fund.
 ]
 
+#pause
+
 So, why I am starting this instead of joining something that is already established?
 
 
@@ -59,7 +61,7 @@ So, why I am starting this instead of joining something that is already establis
 #quote(attribution: [MIT News - February 28, 2025])[
   The incredible competition performance is just one manifestation of MIT's vibrant community of students who love doing math and discussing math with each other, students who through their hard work in this environment excel in ways beyond competitions, too.
 ]
-
+  
 #pause
 
 / My takeaway: High performance is a byproduct of community. Gather people with the same goal together, talking and building, (+ structure and hard work) and the results follow.
