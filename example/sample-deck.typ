@@ -139,15 +139,11 @@ For a space of *N* outputs, collisions become likely after roughly $sqrt(N)$ ran
 
 A 256-bit hash has $2^256$ possible outputs.
 
-#v(1em)
-
-#pause
+#pause-gap()
 
 The birthday bound puts the collision scale near $2^128$ inputs -- still enormous.
 
-#v(1em)
-
-#pause
+#pause-gap()
 
 The key idea is not “half the bins are full,” but “many pairs can match.”
 
