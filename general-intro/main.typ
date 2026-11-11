@@ -229,7 +229,10 @@ Strengthen fundamentals through project presentations with #emph(text(swat-color
 
 #v(0.25fr)
 
-#flow([Pitch], [Scope], [Build], [Defended Review], [#text(0.8em, [Retrospective])])
+#flow([Pitch], [Scope], [Build], [Defended Review], [#text(
+  0.8em,
+  [Retrospective],
+)])
 
 #v(0.10fr)
 
