@@ -158,3 +158,7 @@
 
   body
 }
+
+
+/// Creates a vertical gap and a touying `#pause` in one
+#let pause-gap(gap: 1em) = v(gap) + touying.pause
