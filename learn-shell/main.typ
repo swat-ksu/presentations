@@ -182,9 +182,8 @@ You could open files one by one, checking manually. Or, you could ask the comput
   ),
   width: 95%,
 )[
-  // TODO: consider using `grep -n`?
   ```bash
-  grep TODO *.txt 
+  grep -n TODO ideas.txt meeting.txt project.txt
   ```
 ])
 
@@ -242,7 +241,7 @@ What parts did the shell interpret, and which parts did `grep` recieve?
 
 = Command Anatomy
 
-== A Command Is Made Of Strings
+== The Program Receives Arguments
 
 #term-center(
   terminal-frame(
@@ -256,7 +255,7 @@ What parts did the shell interpret, and which parts did `grep` recieve?
 #v(1em)
 #pause
 
-The shell starts `grep` and gives it a list of strings:
+The shell starts `grep` and gives it these arguments:
 
 - `TODO`
 - `ideas.txt`
@@ -273,6 +272,7 @@ In this case, "search for `TODO` in `ideas.txt` and `project.txt`."
 
 Programs often follow similar conventions when assigning meaning to their arguments.
 
+
 #v(1em)
 #pause
 
@@ -288,41 +288,275 @@ For example, `grep` uses `-n` as an option:
 #v(1em)
 #pause
 
-`grep` receives a list of strings: #h(1em) `["-n", "TODO", "ideas.txt"]`
+`grep` receives the arguments: #h(1em) `["-n", "TODO", "ideas.txt"]`
 
 
 #v(1em)
 #pause
 
 #[
-  `grep` interprets those strings as:
+  `grep` interprets them as:
 
   #set terms(indent: 3em)
 
-  / `-n`: include line numbers (option).
+  / `-n`: an _option_ -- include line numbers.
 
-  / `TODO`: text to search for (argument).
+  / `TODO`: an _argument_ --  the text to search for.
 
-  / `ideas.txt`: file to search (argument).
+  / `ideas.txt`: an _argument_ -- the file to search.
 ]
 
-== Vocab Overview
+---
+
+#align(center)[
+  #set text(size: 1.6em)
+
+  #show raw: it => {
+    set text(size: 1.2em)
+    show regex("\[\d*\]"): it => pin(eval(it.text.slice(1, -1)))
+    it
+  }
+
+  `[1]grep[2]   [5]-n[6]   [7]TODO[8]   [9]ideas.txt[0]`
+
+  #pinit-label(swat-colors.secondary, (1, 2), top, dx: 70%)[program]
+
+  #pinit-label(swat-colors.tertiary, (5, 6), bottom, dx: -40%)[option]
+
+  #pinit-label(
+    swat-colors.primary-light,
+    (7, 8),
+    bottom,
+    dx: 100%,
+    fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
+  )[search text]
+
+  #pinit-label(
+    swat-colors.primary,
+    (9, 0),
+    top,
+    dx: -30%,
+    fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
+  )[file]
+]
+
+== Options Can Take Values
+
+Some options take another argument as their value.
+
+Here, `head` uses `-n` to specify how many lines to show.
+
+#v(1em)
+#pause
+
+#term-center(terminal-frame(
+  width: 95%,
+  ```bash
+  head -n 5 notes.txt
+  ```,
+))
+
+
+#v(1em)
+#pause
+
+Here, `-n` is an *option*, and `5` is its *option value*.
+
+#v(1em)
+#pause
+
+The exact convention depends on the program.
+
+---
+
+
+#align(center)[
+  #set text(size: 1.6em)
+
+  #show raw: it => {
+    set text(size: 1.2em)
+    show regex("\[\d*\]"): it => pin(eval(it.text.slice(1, -1)))
+    it
+  }
+
+  `[1]head[2]   [5]-n[6]   [7]5[8]   [9]notes.txt[0]`
+
+  #pinit-label(swat-colors.secondary, (1, 2), top, dx: 70%)[program]
+
+  #pinit-label(swat-colors.tertiary, (5, 6), bottom, dx: -70%)[option]
+
+  #pinit-label(
+    swat-colors.primary-light,
+    (7, 8),
+    bottom,
+    dx: 100%,
+    fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
+  )[option value]
+
+  #pinit-label(
+    swat-colors.primary,
+    (9, 0),
+    top,
+    dx: -50%,
+    fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
+  )[positional argument]
+]
+
+== Programs Can Have Subcommands
+
+Some programs use a *subcommand* to choose what action to perform.
+
+#v(1em)
+#pause
+
+#term-center(terminal-frame(
+  width: 95%,
+  ```bash
+  git status
+  ```,
+))
+
+#v(1em)
+#pause
+
+The shell starts the `git` program.
+
+`git` interprets `status` as a subcommand: show the current state of the repository.
+
+#v(1em)
+#pause
+
+Other examples include `git log` and `git diff`.
+
+== Not Every Program Uses The Same Conventions
+
+Many programs use options like `-v` or `--help`.
+
+But argument conventions are not universal.
+
+#v(2em)
+#pause
+
+For example, `dd` uses `name=value` arguments:
+
+#v(0.4em)
+
+#term-center(terminal-frame(
+  width: 95%,
+  ```bash
+  dd if=input.txt of=copy.txt
+  ```,
+))
+
+#v(0.6em)
+#pause
+
+Here, `if=input.txt` and `of=copy.txt` are arguments interpreted by `dd`'s rules.
+
+#v(1.5em)
+#pause
+
+When in doubt, check the program's help or documentation.
+
+#v(1.5em)
+
+== A Few Useful Terms
 
 #[
   #set terms(indent: 0.6em, spacing: 2.4em)
 
-  / Command: what the user types, such as `grep -n TODO *.txt`.
+  / Command: what the user types, such as `grep -n TODO ideas.txt`.
 
   / Program: the executable the shell starts, here `grep`.
 
-  / Argument: a string the shell passes into the program.
+  / Argument: a string the shell passes to the program.
 
-  / Option: an argument treated as a setting -- usually starting with `-` or `--`, here `-n`.
+  / Subcommand: an argument the program interprets as an action.
+
+  / Option: an argument the program interprets as a setting, often starting with `-` or `--`.
 
   / Option value: an argument that supplies a value for an option.
 
-  / Positional argument: an argument interpreted by position, like the search text `TODO`.
+  / Positional argument: an argument the program interprets by its position.
 ]
+
+== Some Annotated Examples
+
+#align(center)[
+  #set text(size: 1.2em)
+
+  #show raw: it => {
+    set text(size: 1.1em)
+    show regex("\[\d*\]"): it => pin(eval(it.text.slice(1, -1)))
+    it
+  }
+
+  `[0]git[1] [2]clone[3] [4]--branch[5] [6]main[7] [8]git@github.com:swat-ksu/org[9]`
+
+  #pinit-label(swat-colors.secondary, (0, 1), top, dx: 100%)[program]
+
+  #pinit-label(swat-colors.tertiary, (2, 3), bottom, dx: 30%)[subcommand]
+
+  #pinit-label(
+    swat-colors.primary-light,
+    (4, 5),
+    top,
+    dx: 20%,
+    fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
+  )[option]
+
+  #pinit-label(
+    swat-colors.primary,
+    (6, 7),
+    bottom,
+    dx: 90%,
+    fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
+  )[option value: the target branch]
+
+  #pinit-label(
+    green,
+    (8, 9),
+    top,
+    dx: -30%,
+  )[positional argument: the target repo]
+]
+
+---
+
+#align(center)[
+  #set text(size: 1.2em)
+
+  #show raw: it => {
+    set text(size: 1.2em)
+    show regex("\[\d*\]"): it => pin(eval(it.text.slice(1, -1)))
+    it
+  }
+
+  `[0]curl[1] [2]--output[3] [4]page.html[5] [6]https://example.com[7]`
+
+  #pinit-label(swat-colors.secondary, (0, 1), top, dx: 100%)[program]
+
+  #pinit-label(swat-colors.tertiary, (2, 3), bottom, dx: 30%)[option]
+
+  #pinit-label(
+    swat-colors.primary-light,
+    (4, 5),
+    top,
+    dx: 20%,
+    fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
+  )[option value]
+
+  #pinit-label(
+    swat-colors.primary,
+    (6, 7),
+    bottom,
+    dx: -50%,
+    fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
+  )[positional argument]
+]
+
+---
+
 
 = Standard Input, Output, & Error
 

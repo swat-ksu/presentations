@@ -13,8 +13,8 @@
 
   let pinit-highlight = pinit-highlight.with(
     dx: -0.2em,
-    dy: -1.66em,
-    extended-height: 2.2em,
+    dy: -1.4em,
+    extended-height: 1.8em,
     extended-width: 0.3em,
   )
 
