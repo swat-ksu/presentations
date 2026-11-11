@@ -154,9 +154,9 @@ A terminal can run different shells, and a shell can run inside different termin
 meaningful analogy here
 
 
-= The Shell is an Interface
+= The Shell Runs Programs
 
-== A Simple Task
+== A simple task
 
 Suppose you have a folder of notes, and you want to find every line that mentions `TODO`.
 
@@ -193,7 +193,7 @@ The shell lets you give instructions to your computer and showing you what they 
   - don't explain `*.txt` yet. revisit it with arguments and shell syntax.
 ]
 
-== Shell Interaction Flow
+== Shell interaction flow
 
 // TODO: make the diagram look prettier
 
@@ -217,7 +217,7 @@ The shell lets you give instructions to your computer and showing you what they 
   )
 ]
 
-== What Actually Happens?
+== What actually happens?
 
 The shell starts a program called `grep`, which finds the matching lines
 
@@ -230,9 +230,9 @@ But the command we typed (`grep TODO *.txt`) has several pieces.
 What parts did the shell interpret, and which parts did `grep` recieve?
 
 
-= Command Anatomy
+= From Command Text to Arguments
 
-== The Program Receives Arguments
+== The program receives arguments
 
 #term-center(
   terminal-frame(
@@ -257,10 +257,11 @@ Then, `grep` gets to decides what those strings mean.
 
 In this case, "search for `TODO` in `ideas.txt` and `project.txt`."
 
-== Common Argument Conventions
+= How Programs Interpret Arguments
+
+== Options and positional arguments
 
 Programs often follow similar conventions when assigning meaning to their arguments.
-
 
 #pause-gap()
 
@@ -327,7 +328,7 @@ For example, `grep` uses `-n` as an option:
   )[file],
 )
 
-== Options Can Take Values
+== Options with values
 
 Some options take another argument as their value.
 
@@ -386,7 +387,7 @@ The exact convention depends on the program.
   )[positional argument],
 )
 
-== Programs Can Have Subcommands
+== Subcommands
 
 Some programs use a *subcommand* to choose what action to perform.
 
@@ -409,7 +410,7 @@ The shell starts the `git` program.
 
 Other examples include `git log` and `git diff`.
 
-== Not Every Program Uses The Same Conventions
+== Different conventions
 
 Many programs use options like `-v` or `--help`.
 
@@ -438,7 +439,7 @@ When in doubt, check the program's help or documentation.
 
 #v(1.5em)
 
-== A Few Useful Terms
+== Vocabulary recap
 
 #[
   #set terms(indent: 0.6em, spacing: 2.4em)
@@ -458,7 +459,7 @@ When in doubt, check the program's help or documentation.
   / Positional argument: an argument the program interprets by its position.
 ]
 
-== Some Annotated Examples
+== Annotated examples
 
 #command-diagram(
   (`git`, `clone`, `--branch`, `main`, `git@github.com:swat-ksu/org`),
@@ -528,7 +529,7 @@ When in doubt, check the program's help or documentation.
   )[positional argument],
 )
 
-= Standard Input, Output, & Error
+= How Programs Communicate
 
 // explain stdin/out/err
 
