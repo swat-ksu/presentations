@@ -104,7 +104,7 @@
 
 
 /// SwAT presentation theme.
-/// 
+///
 /// Example:
 ///
 /// ```typst
@@ -156,6 +156,6 @@
   )
 
   touying.slides-only(theme.title-slide(author: _authors(authors)))
-  
+
   body
 }

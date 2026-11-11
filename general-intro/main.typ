@@ -77,13 +77,12 @@ Coursework is not enough.
 
   - Tools and frameworks are deliberately de-emphasized.
 
-  - Lowerclassmen don't get practical experience with  real systems.
+  - Lowerclassmen don't get practical experience with real systems.
 ]
 
 == Interviews and Job Hunting
 
-Interviewers ask about collaborative/real-world work explicitly, or they weight
-it implicitly over solo work.
+Interviewers ask about collaborative/real-world work explicitly, or they weight it implicitly over solo work.
 
 #pause
 
@@ -139,8 +138,7 @@ Many wonder where the door into cs/tech jobs is now.
 
 #pause
 
-*This is the door:* my aim is to provide students with real experience that
-they can speak to without having to be hired, so that they *can* get hired.
+*This is the door:* my aim is to provide students with real experience that they can speak to without having to be hired, so that they *can* get hired.
 
 #v(0.5fr)
 
@@ -229,10 +227,7 @@ Strengthen fundamentals through project presentations with #emph(text(swat-color
 
 #v(0.25fr)
 
-#flow([Pitch], [Scope], [Build], [Defended Review], [#text(
-  0.8em,
-  [Retrospective],
-)])
+#flow([Pitch], [Scope], [Build], [Defended Review], text(0.8em, [Retrospective]))
 
 #v(0.10fr)
 
@@ -282,12 +277,8 @@ Strengthen fundamentals through project presentations with #emph(text(swat-color
 
 ==
 
-#set align(center)
-#emph(text(size: 1.8em, swat-colors.tertiary)[
-  The End
-])
+#align(center, emph(text(size: 1.8em, swat-colors.tertiary)[The End]))
 
-#set align(left)
 #quote(attribution: "Goethe, Wilhelm Meister’s Apprenticeship")[
   #text(lang: "de")[
     "Wenn wir die Menschen nur nehmen, wie sie sind, so machen wir sie schlechter; wenn wir sie behandeln, als wären sie, was sie sein sollten, so bringen wir sie dahin, wohin sie zu bringen sind."
