@@ -1,14 +1,10 @@
 #import "@preview/pinit:0.2.2": *
 
-#let pinit-label(
-  color,
-  (pin1, pin2),
-  pos,
-  dx: 0%,
-  dy: 0%,
-  fill: none,
-  body,
-) = context {
+
+#let _display-pinit-label(i, label) = context {
+  let (pin1, pin2) = (2 * i, 2 * i + 1)
+  let (color, pos, dx, dy, fill, body) = label
+
   assert(pos in (top, bottom), message: "`pos` must be `top` or `bottom`")
 
   let pinit-highlight = pinit-highlight.with(
@@ -34,7 +30,6 @@
     body-dy: height - 0.26em,
   )
 
-
   pinit-highlight(
     pin1,
     pin2,
@@ -59,3 +54,52 @@
   )
 }
 
+
+#let command-diagram(
+  pieces,
+  piece-spacing: 1,
+  text-size: 1.2em,
+  raw-text-size: 1.1em,
+  ..labels,
+) = align(center, {
+  set text(size: text-size)
+
+  // this is a hacky way of doing it, but manually interpersing
+  // the pins didn't display correctly, so here we are :/
+  show raw: it => {
+    set text(size: raw-text-size)
+    show regex("\[\d*\]"): it => pin(eval(it.text.slice(1, -1)))
+    it
+  }
+
+  let brace(it) = "[" + str(it) + "]"
+
+  let pieces = pieces
+    .enumerate()
+    .map(((i, p)) => (2 * i, p.text))
+    .map(((i, p)) => brace(i) + p + brace(i + 1))
+    .join(" " * piece-spacing)
+
+  raw(pieces)
+
+  for (i, label) in labels.pos().enumerate() {
+    _display-pinit-label(i, label)
+  }
+})
+
+
+#let pinit-label(
+  color,
+  pos,
+  dx: 0%,
+  dy: 0%,
+  fill: none,
+  body,
+) = (
+  color: color,
+  pos: pos,
+  dx: dx,
+  dy: dy,
+  fill: fill,
+  body: body,
+)

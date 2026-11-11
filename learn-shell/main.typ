@@ -9,7 +9,7 @@
 #import "@preview/fletcher:0.5.8" as fletcher: edge, node
 #let fletcher-diagram = touying-reduce.with(fletcher)
 
-#import "util.typ": pinit-label
+#import "util.typ": command-diagram, pinit-label
 
 #show: swat-doc.with(
   title: [Intro to Your Shell],
@@ -290,7 +290,6 @@ For example, `grep` uses `-n` as an option:
 
 `grep` receives the arguments: #h(1em) `["-n", "TODO", "ideas.txt"]`
 
-
 #v(1em)
 #pause
 
@@ -308,37 +307,39 @@ For example, `grep` uses `-n` as an option:
 
 ---
 
-#align(center)[
-  #set text(size: 1.6em)
+#command-diagram(
+  (`grep`, `-n`, `TODO`, `ideas.txt`),
 
-  #show raw: it => {
-    set text(size: 1.2em)
-    show regex("\[\d*\]"): it => pin(eval(it.text.slice(1, -1)))
-    it
-  }
+  piece-spacing: 2,
+  text-size: 1.4em,
+  raw-text-size: 1.4em,
 
-  `[1]grep[2]   [5]-n[6]   [7]TODO[8]   [9]ideas.txt[0]`
+  pinit-label(
+    swat-colors.secondary,
+    top,
+    dx: 70%,
+  )[program],
 
-  #pinit-label(swat-colors.secondary, (1, 2), top, dx: 70%)[program]
+  pinit-label(
+    swat-colors.tertiary,
+    bottom,
+    dx: -40%,
+  )[option],
 
-  #pinit-label(swat-colors.tertiary, (5, 6), bottom, dx: -40%)[option]
-
-  #pinit-label(
+  pinit-label(
     swat-colors.primary-light,
-    (7, 8),
     bottom,
     dx: 100%,
     fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
-  )[search text]
+  )[search text],
 
-  #pinit-label(
+  pinit-label(
     swat-colors.primary,
-    (9, 0),
     top,
     dx: -30%,
     fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
-  )[file]
-]
+  )[file],
+)
 
 == Options Can Take Values
 
@@ -369,38 +370,39 @@ The exact convention depends on the program.
 
 ---
 
+#command-diagram(
+  (`head`, `-n`, `5`, `notes.txt`),
 
-#align(center)[
-  #set text(size: 1.6em)
+  piece-spacing: 2,
+  text-size: 1.4em,
+  raw-text-size: 1.4em,
 
-  #show raw: it => {
-    set text(size: 1.2em)
-    show regex("\[\d*\]"): it => pin(eval(it.text.slice(1, -1)))
-    it
-  }
+  pinit-label(
+    swat-colors.secondary,
+    top,
+    dx: 70%,
+  )[program],
 
-  `[1]head[2]   [5]-n[6]   [7]5[8]   [9]notes.txt[0]`
+  pinit-label(
+    swat-colors.tertiary,
+    bottom,
+    dx: -70%,
+  )[option],
 
-  #pinit-label(swat-colors.secondary, (1, 2), top, dx: 70%)[program]
-
-  #pinit-label(swat-colors.tertiary, (5, 6), bottom, dx: -70%)[option]
-
-  #pinit-label(
+  pinit-label(
     swat-colors.primary-light,
-    (7, 8),
     bottom,
     dx: 100%,
     fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
-  )[option value]
+  )[option value],
 
-  #pinit-label(
+  pinit-label(
     swat-colors.primary,
-    (9, 0),
     top,
     dx: -50%,
     fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
-  )[positional argument]
-]
+  )[positional argument],
+)
 
 == Programs Can Have Subcommands
 
@@ -482,81 +484,73 @@ When in doubt, check the program's help or documentation.
 
 == Some Annotated Examples
 
-#align(center)[
-  #set text(size: 1.2em)
+#command-diagram(
+  (`git`, `clone`, `--branch`, `main`, `git@github.com:swat-ksu/org`),
 
-  #show raw: it => {
-    set text(size: 1.1em)
-    show regex("\[\d*\]"): it => pin(eval(it.text.slice(1, -1)))
-    it
-  }
+  pinit-label(
+    swat-colors.secondary,
+    top,
+    dx: 100%,
+  )[command],
 
-  `[0]git[1] [2]clone[3] [4]--branch[5] [6]main[7] [8]git@github.com:swat-ksu/org[9]`
+  pinit-label(
+    swat-colors.tertiary,
+    bottom,
+    dx: 30%,
+  )[subcommand],
 
-  #pinit-label(swat-colors.secondary, (0, 1), top, dx: 100%)[program]
-
-  #pinit-label(swat-colors.tertiary, (2, 3), bottom, dx: 30%)[subcommand]
-
-  #pinit-label(
+  pinit-label(
     swat-colors.primary-light,
-    (4, 5),
     top,
     dx: 20%,
     fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
-  )[option]
+  )[option],
 
-  #pinit-label(
+  pinit-label(
     swat-colors.primary,
-    (6, 7),
     bottom,
     dx: 90%,
     fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
-  )[option value: the target branch]
+  )[option value: the target branch],
 
-  #pinit-label(
+  pinit-label(
     green,
-    (8, 9),
     top,
     dx: -30%,
-  )[positional argument: the target repo]
-]
+  )[positional argument: the target repo],
+)
 
 ---
 
-#align(center)[
-  #set text(size: 1.2em)
+#command-diagram(
+  (`curl`, `--output`, `page.html`, `https://example.com`),
 
-  #show raw: it => {
-    set text(size: 1.2em)
-    show regex("\[\d*\]"): it => pin(eval(it.text.slice(1, -1)))
-    it
-  }
+  pinit-label(
+    swat-colors.secondary,
+    top,
+    dx: 100%,
+  )[program],
 
-  `[0]curl[1] [2]--output[3] [4]page.html[5] [6]https://example.com[7]`
+  pinit-label(
+    swat-colors.tertiary,
+    bottom,
+    dx: 30%,
+  )[option],
 
-  #pinit-label(swat-colors.secondary, (0, 1), top, dx: 100%)[program]
-
-  #pinit-label(swat-colors.tertiary, (2, 3), bottom, dx: 30%)[option]
-
-  #pinit-label(
+  pinit-label(
     swat-colors.primary-light,
-    (4, 5),
     top,
     dx: 20%,
     fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
-  )[option value]
+  )[option value],
 
-  #pinit-label(
+  pinit-label(
     swat-colors.primary,
-    (6, 7),
     bottom,
     dx: -50%,
     fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
-  )[positional argument]
-]
-
----
-
+  )[positional argument],
+)
 
 = Standard Input, Output, & Error
 
