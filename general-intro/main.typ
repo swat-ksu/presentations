@@ -40,13 +40,13 @@ I:
 #pause
 
 #item-by-item[
-- am the founder and current president of SwAT;
+  - am the founder and current president of SwAT;
 
-- am a Senior Computer Science and Math major with a Discrete Math and Operations Research concentration;
+  - am a Senior Computer Science and Math major with a Discrete Math and Operations Research concentration;
 
-- have built a large-scale combat simulation plugin in minecraft using java + paper, explored ML and quant workflows, and created a 16-bit CPU simulation in multisim;
+  - have built a large-scale combat simulation plugin in minecraft using java + paper, explored ML and quant workflows, and created a 16-bit CPU simulation in multisim;
 
-- was involved with Student Managed Investment Fund.
+  - was involved with Student Managed Investment Fund.
 ]
 
 #pause
@@ -89,7 +89,7 @@ it implicitly over solo work.
 
 They want to know that you can work with other people.
 
-#pause 
+#pause
 
 Being able to answer and explain the following is important in interviews:
 
@@ -200,27 +200,27 @@ Strengthen fundamentals through project presentations with #emph(text(swat-color
 == Educate - Pace
 
 #item-by-item[
-- CSE 1321 and 1322 take a long time. (6 months / 1 year)
+  - CSE 1321 and 1322 take a long time. (6 months / 1 year)
 
-- For most students that pace is correct.
+  - For most students that pace is correct.
 
-- For students who want more, can handle more, and are aiming at hard fields, it is too slow.
+  - For students who want more, can handle more, and are aiming at hard fields, it is too slow.
 
-- We will bring lowerclassmen up to speed faster, on their own initiative.
+  - We will bring lowerclassmen up to speed faster, on their own initiative.
 
-- Upperclassmen benefit as well.
+  - Upperclassmen benefit as well.
 ]
 
 == Connect
 
 #item-by-item[
-- Industry partnerships and guest reviewers.
+  - Industry partnerships and guest reviewers.
 
-- Client work under a written agreement.
+  - Client work under a written agreement.
 
-- Support for senior projects and students in SWE courses.
+  - Support for senior projects and students in SWE courses.
 
-- Alumni returning to sit on review panels & mentor students.
+  - Alumni returning to sit on review panels & mentor students.
 ]
 
 = Specifics
@@ -229,21 +229,20 @@ Strengthen fundamentals through project presentations with #emph(text(swat-color
 
 #v(0.25fr)
 
-#flow([Pitch], [Scope], [Build], [Defended Review], 
-[#text(0.8em, [Retrospective])])
+#flow([Pitch], [Scope], [Build], [Defended Review], [#text(0.8em, [Retrospective])])
 
 #v(0.10fr)
 
 #pause
 
 #item-by-item[
-- Hard deadlines.
+  - Hard deadlines.
 
-- Room to change direction, or to halt a project that is not working.
+  - Room to change direction, or to halt a project that is not working.
 
-- Technical decisions get written down as they are made.
+  - Technical decisions get written down as they are made.
 
-- Branches for features and bugs; version control history can serve as the record of the project.
+  - Branches for features and bugs; version control history can serve as the record of the project.
 ]
 
 #v(0.25fr)
@@ -251,11 +250,11 @@ Strengthen fundamentals through project presentations with #emph(text(swat-color
 == Defended Review
 
 #item-by-item[
-- This is a learning experience; a mock interview, if you will.
+  - This is a learning experience; a mock interview, if you will.
 
-- A panel questions the team against a written rubric.
+  - A panel questions the team against a written rubric.
 
-- Then the room gets to ask anything.
+  - Then the room gets to ask anything.
 ]
 
 #strong[Assessed on:]
@@ -263,19 +262,19 @@ Strengthen fundamentals through project presentations with #emph(text(swat-color
 #pause
 
 #item-by-item[
-- code quality,
+  - code quality,
 
-- repo and version control practice,
+  - repo and version control practice,
 
-- architecture, 
+  - architecture,
 
-- tool choice,
+  - tool choice,
 
-- documentation,
+  - documentation,
 
-- results,
+  - results,
 
-- and whether you can explain it.
+  - and whether you can explain it.
 ]
 
 ==
@@ -290,6 +289,6 @@ Strengthen fundamentals through project presentations with #emph(text(swat-color
   #text(lang: "de")[
     "Wenn wir die Menschen nur nehmen, wie sie sind, so machen wir sie schlechter; wenn wir sie behandeln, als wären sie, was sie sein sollten, so bringen wir sie dahin, wohin sie zu bringen sind."
   ]
-  
+
   "If we take people as they are, we make them worse. If we treat them as what they ought to be, we help them become what they’re capable of becoming."
 ]
