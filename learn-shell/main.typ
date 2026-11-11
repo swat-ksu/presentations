@@ -17,6 +17,9 @@
     author("Adrian Valcarcel-Schott", gh: "avalsch"),
     author("Brendan Moore", gh: "Mere-Solace"),
   ),
+  config-common(
+    show-hide-set-list-marker-none: false,
+  ),
 )
 
 #show raw.where(block: false): set text(size: 1.2em)
@@ -236,7 +239,7 @@ What parts did the shell interpret, and which parts did `grep` recieve?
 
 Let's look at a slightly simpler example:
 
-#pause-gap()
+#pause-gap(gap: 0.4em)
 
 #term-center(
   terminal-frame(
@@ -247,15 +250,19 @@ Let's look at a slightly simpler example:
   ),
 )
 
-#pause-gap()
+#pause-gap(gap:0.6em)
 
 The shell starts `grep` and gives it these arguments:
 
-- `TODO`
-- `ideas.txt`
-- `project.txt`
+#[
+  #set list(indent: 1.4em)
 
-#pause-gap()
+  - `TODO`
+  - `ideas.txt`
+  - `project.txt`
+]
+
+#pause-gap(gap: 0.4em)
 
 Then, `grep` gets to decides what those strings mean.
 
@@ -267,7 +274,7 @@ In this case, "search for `TODO` in `ideas.txt` and `project.txt`."
 
 Programs often follow similar conventions when assigning meaning to their arguments.
 
-#pause-gap()
+#pause-gap(gap: 0.6em)
 
 For example, `grep` uses `-n` as an option:
 
@@ -278,22 +285,38 @@ For example, `grep` uses `-n` as an option:
   ```,
 ))
 
-#pause-gap()
+#pause-gap(gap: 0.6em)
 
-`grep` receives the arguments: #h(1em) `["-n", "TODO", "ideas.txt"]`
+`grep` receives arguments: #pause `["-n", "TODO", "ideas.txt"]`#pause, and interprets them as:
 
-#pause-gap()
+#pause-gap(gap: 0.6em)
 
 #[
-  `grep` interprets them as:
+  #show terms: it => block(
+    inset: (x: 2em),
+    grid(
+      columns: (auto, 1fr),
+      row-gutter: 0.8em,
+      column-gutter: 0.6em,
+      ..it
+        .children
+        .map(item => (
+          grid.cell(align: right, item.term),
+          item.description,
+        ))
+        .flatten(),
+    ),
+  )
 
-  #set terms(indent: 3em)
+  #let b(it) = strong(text(fill: swat-colors.tertiary.darken(10%), it))
+  #let y(it) = strong(text(fill: swat-colors.primary-light.darken(10%), it))
+  #let o(it) = strong(text(fill: swat-colors.primary.darken(10%), it))
 
-  / `-n`: an _option_ -- include line numbers.
+  / #b[`-n`]: an _option_ -- include line numbers.
 
-  / `TODO`: an _argument_ --  the text to search for.
+  / #y[`TODO`]: an _argument_ --  the text to search for.
 
-  / `ideas.txt`: an _argument_ -- the file to search.
+  / #o[`ideas.txt`]: an _argument_ -- the file to search.
 ]
 
 ---
@@ -314,13 +337,13 @@ For example, `grep` uses `-n` as an option:
   pinit-label(
     swat-colors.tertiary,
     bottom,
-    dx: -40%,
-  )[option],
+    dx: 60%,
+  )[option: include line numbers],
 
   pinit-label(
     swat-colors.primary-light,
-    bottom,
-    dx: 100%,
+    top,
+    // dx: 100%,
     fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
   )[search text],
 
@@ -420,11 +443,9 @@ Many programs use options like `-v` or `--help`.
 
 But argument conventions are not universal.
 
-#pause-gap(gap: 2em)
+#pause-gap(gap: 0.8em)
 
 For example, `dd` uses `name=value` arguments:
-
-#v(0.4em)
 
 #term-center(terminal-frame(
   width: 95%,
@@ -437,16 +458,14 @@ For example, `dd` uses `name=value` arguments:
 
 Here, `if=input.txt` and `of=copy.txt` are arguments interpreted by `dd`'s rules.
 
-#pause-gap(gap: 1.5em)
+#pause-gap(gap: 1.2em)
 
 When in doubt, check the program's help or documentation.
-
-#v(1.5em)
 
 == Vocabulary recap
 
 #[
-  #set terms(indent: 0.6em, spacing: 2.4em)
+  #set terms(indent: 0.6em, spacing: 2em)
 
   / Command: what the user types, such as `grep -n TODO ideas.txt`.
 
