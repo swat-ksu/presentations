@@ -234,6 +234,10 @@ What parts did the shell interpret, and which parts did `grep` recieve?
 
 == The program receives arguments
 
+Let's look at a slightly simpler example:
+
+#pause-gap()
+
 #term-center(
   terminal-frame(
     width: 95%,
