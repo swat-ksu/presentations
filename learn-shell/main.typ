@@ -123,9 +123,7 @@
 
 There are many shells available for you to choose from.
 
-#pause
-
-#v(1em)
+#pause-gap()
 
 #side-by-side(align: top)[
   #align(center)[*POSIX-Like*]
@@ -146,13 +144,11 @@ There are many shells available for you to choose from.
 
 The *terminal* is the app or window; the *shell* is the program interpreting what you type.
 
-#v(2em)
-#pause
+#pause-gap(gap: 2em)
 
 A terminal can run different shells, and a shell can run inside different terminal apps.
 
-#v(2em)
-#pause
+#pause-gap(gap: 2em)
 
 // TODO: analogy
 meaningful analogy here
@@ -164,13 +160,11 @@ meaningful analogy here
 
 Suppose you have a folder of notes, and you want to find every line that mentions `TODO`.
 
-#v(1em)
-#pause
+#pause-gap()
 
 You could open files one by one, checking manually. Or, you could ask the computer:
 
-#v(1em)
-#pause
+#pause-gap()
 
 #term-center(terminal-block(
   system: system(
@@ -187,8 +181,7 @@ You could open files one by one, checking manually. Or, you could ask the comput
   ```
 ])
 
-#v(1em)
-#pause
+#pause-gap()
 
 The shell lets you give instructions to your computer and showing you what they return.
 
@@ -228,13 +221,11 @@ The shell lets you give instructions to your computer and showing you what they 
 
 The shell starts a program called `grep`, which finds the matching lines
 
-#v(2em)
-#pause
+#pause-gap(gap: 2em)
 
 But the command we typed (`grep TODO *.txt`) has several pieces.
 
-#v(2em)
-#pause
+#pause-gap(gap: 2em)
 
 What parts did the shell interpret, and which parts did `grep` recieve?
 
@@ -252,8 +243,7 @@ What parts did the shell interpret, and which parts did `grep` recieve?
   ),
 )
 
-#v(1em)
-#pause
+#pause-gap()
 
 The shell starts `grep` and gives it these arguments:
 
@@ -261,8 +251,7 @@ The shell starts `grep` and gives it these arguments:
 - `ideas.txt`
 - `project.txt`
 
-#v(1em)
-#pause
+#pause-gap()
 
 Then, `grep` gets to decides what those strings mean.
 
@@ -273,8 +262,7 @@ In this case, "search for `TODO` in `ideas.txt` and `project.txt`."
 Programs often follow similar conventions when assigning meaning to their arguments.
 
 
-#v(1em)
-#pause
+#pause-gap()
 
 For example, `grep` uses `-n` as an option:
 
@@ -285,13 +273,11 @@ For example, `grep` uses `-n` as an option:
   ```,
 ))
 
-#v(1em)
-#pause
+#pause-gap()
 
 `grep` receives the arguments: #h(1em) `["-n", "TODO", "ideas.txt"]`
 
-#v(1em)
-#pause
+#pause-gap()
 
 #[
   `grep` interprets them as:
@@ -347,8 +333,7 @@ Some options take another argument as their value.
 
 Here, `head` uses `-n` to specify how many lines to show.
 
-#v(1em)
-#pause
+#pause-gap()
 
 #term-center(terminal-frame(
   width: 95%,
@@ -357,14 +342,11 @@ Here, `head` uses `-n` to specify how many lines to show.
   ```,
 ))
 
-
-#v(1em)
-#pause
+#pause-gap()
 
 Here, `-n` is an *option*, and `5` is its *option value*.
 
-#v(1em)
-#pause
+#pause-gap()
 
 The exact convention depends on the program.
 
@@ -408,8 +390,7 @@ The exact convention depends on the program.
 
 Some programs use a *subcommand* to choose what action to perform.
 
-#v(1em)
-#pause
+#pause-gap()
 
 #term-center(terminal-frame(
   width: 95%,
@@ -418,15 +399,13 @@ Some programs use a *subcommand* to choose what action to perform.
   ```,
 ))
 
-#v(1em)
-#pause
+#pause-gap()
 
 The shell starts the `git` program.
 
 `git` interprets `status` as a subcommand: show the current state of the repository.
 
-#v(1em)
-#pause
+#pause-gap()
 
 Other examples include `git log` and `git diff`.
 
@@ -436,8 +415,7 @@ Many programs use options like `-v` or `--help`.
 
 But argument conventions are not universal.
 
-#v(2em)
-#pause
+#pause-gap(gap: 2em)
 
 For example, `dd` uses `name=value` arguments:
 
@@ -450,13 +428,11 @@ For example, `dd` uses `name=value` arguments:
   ```,
 ))
 
-#v(0.6em)
-#pause
+#pause-gap(gap: 0.6em)
 
 Here, `if=input.txt` and `of=copy.txt` are arguments interpreted by `dd`'s rules.
 
-#v(1.5em)
-#pause
+#pause-gap(gap: 1.5em)
 
 When in doubt, check the program's help or documentation.
 
