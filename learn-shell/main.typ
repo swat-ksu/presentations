@@ -177,7 +177,7 @@ You could open files one by one, checking manually. Or, you could ask the comput
   width: 95%,
 )[
   ```bash
-  grep -n TODO ideas.txt meeting.txt project.txt
+  grep -n TODO *.txt
   ```
 ])
 
@@ -223,7 +223,7 @@ The shell starts a program called `grep`, which finds the matching lines
 
 #pause-gap(gap: 2em)
 
-But the command we typed (`grep TODO *.txt`) has several pieces.
+But the command we typed (`grep -n TODO *.txt`) has several pieces.
 
 #pause-gap(gap: 2em)
 
