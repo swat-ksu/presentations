@@ -6,6 +6,9 @@
 #import "@preview/conch:0.1.0" as conch: system, terminal-block, terminal-frames
 #import "@preview/pinit:0.2.2": *
 
+#import "@preview/fletcher:0.5.8" as fletcher: edge, node
+#let fletcher-diagram = touying-reduce.with(fletcher)
+
 #import "util.typ": pinit-label
 
 #show: swat-doc.with(
@@ -149,133 +152,69 @@ meaningful analogy here
 
 = The Shell is an Interface
 
-== A Simple Hello
+== A Simple Task
 
-A *shell* is an interface that allows access to OS functionality and other programs.
+Suppose you have a folder of notes, and you want to find every line that mentions `TODO`.
 
-#v(2em)
+#v(1em)
 #pause
 
-#term-center(terminal-block[
-  ```bash
-  echo hello world!
-  ```
-])
+You could open files one by one, checking manually. Or, you could ask the computer:
 
----
-
-#let frames = terminal-frames(
-  commands: ("cd /", "ls", "ls -a", "cd home", "pwd", ""),
-  mode: "key-frames",
-  height: 400pt,
-)
-
-#alternatives(..frames.map(term-center))
-
-== Command Anatomy
-
-#align(center)[
-  #show raw: set text(size: 2.8em)
-
-  #pin(1)`ls `#pin(2)`-a`#pin(3)
-
-  #context {
-    pinit-point-from(
-      (2, 1, 1),
-      offset-dx: -20pt,
-      body-dx: -std.measure([Command]).width,
-    )[Command]
-  }
-
-  #pinit-point-from(
-    (3, 2),
-  )[Argument]
-]
-
-#v(4em)
-
-#term-center(terminal-block(
-  system: system(
-    files: (:
-      ..("foo.txt", "bar.py", "baz.typ").map(k => (k, "")).to-dict(),
-    ),
-  ),
-  width: 100%,
-)[
-  ```bash
-  ls
-
-  ls -a
-  ```
-])
-
----
-
-#align(center)[
-  #set text(size: 1.2em)
-
-  #show raw: it => {
-    set text(size: 2.2em)
-    show regex("\[\d*\]"): it => pin(eval(it.text.slice(1, -1)))
-    it
-  }
-
-  `[1]git[2] [5]commit[6] [7]-a[8] [9]-m 'My message'[0]`
-
-  #pinit-label(swat-colors.secondary, (1, 2), top, dx: 70%)[command]
-
-  #pinit-label(swat-colors.tertiary, (5, 6), bottom, dx: -40%)[subcommand]
-
-  #pinit-label(
-    swat-colors.primary-light,
-    (7, 8),
-    bottom,
-    dx: 100%,
-    fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
-  )[subcommand flag]
-
-  #pinit-label(
-    swat-colors.primary,
-    (9, 0),
-    top,
-    dx: -30%,
-    fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
-  )[subcommand flag (with argument)]
-]
-
----
+#v(1em)
+#pause
 
 #term-center(terminal-block(
   system: system(
     files: (
-      "foo.txt": (content: "", mode: 644),
-      "bar.py": (content: "", mode: 644),
-      "baz.sh": (
-        content: ```bash
-        #!/usr/bin/bash
-
-        echo "Hello, World"
-        ```.text,
-        mode: 755,
-      ),
+      "ideas.txt": read("ex01/ideas.txt"),
+      "meeting.txt": read("ex01/meeting.txt"),
+      "project.txt": read("ex01/project.txt"),
     ),
   ),
-  width: 100%,
+  width: 95%,
 )[
   ```bash
-  ls
-
-  ls -a
-
-  ls -lah
-
-  ./baz.sh
-
-  ls /
-
-  pwd
+  grep TODO *.txt
   ```
 ])
+
+#v(1em)
+#pause
+
+The shell lets you give instructions to your computer and showing you what they return.
+
+#speaker-notes[
+  - grep is a program that searches text.
+
+  - the shell is not doing the search itself; it starts grep and passes it information.
+
+  - don't explain `*.txt` yet. revisit it with arguments and shell syntax.
+]
+
+== Shell Interaction Flow
+
+// TODO: make the diagram look prettier
+
+#align(center)[
+  #set text(size: 1.2em, weight: "medium")
+
+  #fletcher-diagram(
+    node-stroke: .2em,
+    node-inset: 1em,
+    node-corner-radius: 1em,
+    edge-stroke: 0.1em,
+    spacing: 8em,
+    {
+      node((0, 0))[You]
+      edge("-|>")[`command`]
+      node((1, 0))[Shell]
+      edge("-|>")[`executes`]
+      node((2, 0))[Program]
+      edge((2, 0), (2, 0.6), (0, 0.6), (0, 0), "-|>")[`result`]
+    },
+  )
+]
 
 // motivation?
 // simulate actual program execution
