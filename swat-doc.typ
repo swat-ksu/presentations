@@ -4,10 +4,9 @@
 
 #import "@preview/octique:0.1.1": octique-inline
 
+#import "@preview/presio:0.2.3": media, speaker-notes
 
 // TODO(@avalsch): add proper article export support
-// TODO(@avalsch): add external speaker notes integration
-
 
 /// SwAT color palette
 #let swat-colors = (
@@ -104,7 +103,7 @@
 
 
 /// SwAT presentation theme.
-/// 
+///
 /// Example:
 ///
 /// ```typst
