@@ -3,7 +3,7 @@
 #import touying: *
 #import theme: *
 
-#import "@preview/conch:0.1.0" as conch: system, terminal-block, terminal-frames
+#import "@preview/conch:0.1.0" as conch: system, terminal-block, terminal-frame, terminal-frames
 #import "@preview/pinit:0.2.2": *
 
 #import "@preview/fletcher:0.5.8" as fletcher: edge, node
@@ -18,6 +18,8 @@
     author("Brendan Moore", gh: "Mere-Solace"),
   ),
 )
+
+#show raw.where(block: false): set text(size: 1.2em)
 
 #let system = system.with(hostname: "ksu")
 
@@ -73,6 +75,12 @@
 #let terminal-frames = terminal-frames.with(
   ..term-config,
 )
+
+#let terminal-frame(..args, body) = terminal-frames(
+  style: (inset: (top: -0.4em, rest: 0.8em)),
+  commands: (body.text.trim(),),
+  ..args,
+).first()
 
 #let term-center(it) = align(center, block(align(top + left, it)))
 
@@ -174,8 +182,9 @@ You could open files one by one, checking manually. Or, you could ask the comput
   ),
   width: 95%,
 )[
+  // TODO: consider using `grep -n`?
   ```bash
-  grep TODO *.txt
+  grep TODO *.txt 
   ```
 ])
 
@@ -216,9 +225,104 @@ The shell lets you give instructions to your computer and showing you what they 
   )
 ]
 
-// motivation?
-// simulate actual program execution
-// explain command line args
+== What Actually Happens?
+
+The shell starts a program called `grep`, which finds the matching lines
+
+#v(2em)
+#pause
+
+But the command we typed (`grep TODO *.txt`) has several pieces.
+
+#v(2em)
+#pause
+
+What parts did the shell interpret, and which parts did `grep` recieve?
+
+
+= Command Anatomy
+
+== A Command Is Made Of Strings
+
+#term-center(
+  terminal-frame(
+    width: 95%,
+    ```bash
+      grep TODO ideas.txt project.txt
+    ```,
+  ),
+)
+
+#v(1em)
+#pause
+
+The shell starts `grep` and gives it a list of strings:
+
+- `TODO`
+- `ideas.txt`
+- `project.txt`
+
+#v(1em)
+#pause
+
+Then, `grep` gets to decides what those strings mean.
+
+In this case, "search for `TODO` in `ideas.txt` and `project.txt`."
+
+== Common Argument Conventions
+
+Programs often follow similar conventions when assigning meaning to their arguments.
+
+#v(1em)
+#pause
+
+For example, `grep` uses `-n` as an option:
+
+#term-center(terminal-frame(
+  width: 95%,
+  ```bash
+  grep -n TODO ideas.txt
+  ```,
+))
+
+#v(1em)
+#pause
+
+`grep` receives a list of strings: #h(1em) `["-n", "TODO", "ideas.txt"]`
+
+
+#v(1em)
+#pause
+
+#[
+  `grep` interprets those strings as:
+
+  #set terms(indent: 3em)
+
+  / `-n`: include line numbers (option).
+
+  / `TODO`: text to search for (argument).
+
+  / `ideas.txt`: file to search (argument).
+]
+
+== Vocab Overview
+
+#[
+  #set terms(indent: 0.6em, spacing: 2.4em)
+
+  / Command: what the user types, such as `grep -n TODO *.txt`.
+
+  / Program: the executable the shell starts, here `grep`.
+
+  / Argument: a string the shell passes into the program.
+
+  / Option: an argument treated as a setting -- usually starting with `-` or `--`, here `-n`.
+
+  / Option value: an argument that supplies a value for an option.
+
+  / Positional argument: an argument interpreted by position, like the search text `TODO`.
+]
 
 = Standard Input, Output, & Error
 
