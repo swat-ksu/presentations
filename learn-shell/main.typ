@@ -76,6 +76,7 @@
 )
 
 #let terminal-frames = terminal-frames.with(
+  style: (inset: (rest: 0.8em)),
   ..term-config,
 )
 
@@ -85,7 +86,10 @@
   ..args,
 ).first()
 
-#let term-center(it) = align(center, block(align(top + left, it)))
+#let term-center(height: auto, it) = align(center, block(
+  height: height,
+  align(top + left, it),
+))
 
 // kinda hacky, overrides conch's "bold" font weight to be
 // a more reasonable "medium" so that bolded content doesn't
@@ -250,7 +254,7 @@ Let's look at a slightly simpler example:
   ),
 )
 
-#pause-gap(gap:0.6em)
+#pause-gap(gap: 0.6em)
 
 The shell starts `grep` and gives it these arguments:
 
@@ -267,6 +271,110 @@ The shell starts `grep` and gives it these arguments:
 Then, `grep` gets to decides what those strings mean.
 
 In this case, "search for `TODO` in `ideas.txt` and `project.txt`."
+
+== Quotes keep text together
+
+A file name can contain spaces:
+
+#pause
+
+#let commands = ("grep TODO meeting notes.txt", "grep TODO \"meeting notes.txt\"", "")
+
+#let frames(i) = layout(
+  size => terminal-frames(
+    width: size.width * 95%,
+    height: 100%,
+    commands: commands,
+    system: system(files: ("meeting notes.txt": read("ex02/meeting notes.txt"))),
+    mode: "key-frames",
+  )
+    .map(term-center.with(height: 60%))
+    .at(i),
+)
+
+// garbage code to work around a touying `alternatives-fn` bug
+#alternatives-match(
+  ("1": hide(frames(0)), ..range(4).map(i => (str(i + 2), frames(i))).to-dict()),
+)
+
+#uncover("5-")[
+  The quotes tell the shell to pass `"meeting notes.txt"` as *one* argument.]
+
+== Parameter expansion
+
+The shell can replace a variable reference like `$HOME` with its value.
+
+#pause
+
+#term-center(terminal-block(
+  system: system(
+    files: (
+      "Assignment 2/",
+      "example-pres.pdf",
+      "m2_assignment_2.docx",
+    )
+      .map(f => ("/home/swat/Downloads/" + f, ""))
+      .to-dict(),
+  ),
+  width: 95%,
+  ```bash
+  ls "$HOME/Downloads"
+  ```,
+))
+
+#pause-gap()
+
+`$HOME` expands to the current user's home directory.
+
+The double quotes keep the expanded path together as one argument.
+
+== Pathname expansion
+
+The shell can expand a pattern to matching filenames.
+
+#pause
+
+#alternatives(
+  ..terminal-frames(
+    system: system(files: (
+      "notes.md": "",
+      "ideas.txt": read("ex01/ideas.txt"),
+      "meeting.txt": read("ex01/meeting.txt"),
+      "project.txt": read("ex01/project.txt"),
+    )),
+    // width: 95%,
+    height: 100%,
+    commands: ("ls", "echo *.txt", ""),
+    mode: "key-frames",
+  ).map(term-center.with(height: 43%)).slice(0, -1),
+)
+
+#{ v(1em) + pause * 4 }
+
+Before running `echo`, the shell replaces `*.txt` with matching filenames.
+
+The command receives the filenames as arguments; it does not receive the `*`.
+
+== Command substitution
+
+The shell can run a command and insert its output into another command.
+
+#pause
+
+#term-center(terminal-block(
+  width: 95%,
+  ```bash
+  echo "Today is $(date +%F)"
+  ```,
+))
+
+#pause-gap()
+
+The shell runs `date +%F`, then inserts its output into the command that starts `echo`.
+
+#pause-gap()
+
+The shell interprets the syntax. The program receives the resulting arguments.
 
 = How Programs Interpret Arguments
 

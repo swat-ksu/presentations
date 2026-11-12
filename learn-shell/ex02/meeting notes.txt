@@ -1,0 +1,16 @@
+The planning meeting focused on making the shell workshop
+approachable for people who have never used a command line
+before. The introduction will explain the difference between
+a terminal application and the shell running inside it. The
+live demonstration will search a small folder of meeting
+notes for TODO items; TODO: check that the example works
+on each supported shell. The practice folder should contain
+several short text files with realistic notes, a few TODO
+markers, and filenames that are easy to type. Participants
+will try the search command themselves, then change it
+to look for a different word and inspect the matching
+lines. The instructions should include a brief explanation
+of what each part of the command does; TODO: add a note
+about filenames containing spaces. Leave time at the end
+for questions, troubleshooting, and sharing a few useful
+command-line references.
