@@ -332,22 +332,20 @@ The double quotes keep the expanded path together as one argument.
 
 The shell can expand a pattern to matching filenames.
 
-#pause
+#let frames = terminal-frames(
+  system: system(files: (
+    "notes.md": "",
+    "ideas.txt": read("ex01/ideas.txt"),
+    "meeting.txt": read("ex01/meeting.txt"),
+    "project.txt": read("ex01/project.txt"),
+  )),
+  // width: 95%,
+  height: 100%,
+  commands: ("ls", "echo *.txt", ""),
+  mode: "key-frames",
+).map(term-center.with(height: 43%))
 
-#alternatives(
-  ..terminal-frames(
-    system: system(files: (
-      "notes.md": "",
-      "ideas.txt": read("ex01/ideas.txt"),
-      "meeting.txt": read("ex01/meeting.txt"),
-      "project.txt": read("ex01/project.txt"),
-    )),
-    // width: 95%,
-    height: 100%,
-    commands: ("ls", "echo *.txt", ""),
-    mode: "key-frames",
-  ).map(term-center.with(height: 43%)).slice(0, -1),
-)
+#alternatives(hide(frames.first()), ..frames.slice(0, -1))
 
 #{ v(1em) + pause * 4 }
 
