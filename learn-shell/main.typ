@@ -9,7 +9,7 @@
 #import "@preview/fletcher:0.5.8" as fletcher: edge, node
 #let fletcher-diagram = touying-reduce.with(fletcher)
 
-#import "util.typ": command-diagram, pinit-label
+#import "util.typ": command-diagram, encode-ansi, pinit-label, terms-right-align
 
 #show: swat-doc.with(
   title: [Intro to Your Shell],
@@ -59,15 +59,19 @@
   ansi: terminal-ansi,
 )
 
-#let term-config = (
-  system: system(),
-  user: "swat",
+#let term-style = (
   font: (font: "Fira Mono", size: 1em, weight: "regular"),
   chrome: (title, t, f) => block(fill: t.title-bg, width: 100%, inset: 8pt, {
     align(center, text(..f, fill: t.title-fg)[Terminal --- #title])
   }),
   theme: terminal-theme,
+)
+
+#let term-config = (
+  system: system(),
+  user: "swat",
   show-cursor: false,
+  ..term-style,
 )
 
 #let terminal-block = terminal-block.with(
@@ -343,9 +347,12 @@ The shell can expand a pattern to matching filenames.
   height: 100%,
   commands: ("ls", "echo *.txt", ""),
   mode: "key-frames",
-).map(term-center.with(height: 43%))
+)
+.map(term-center.with(height: 43%))
+.slice(0, -1)
 
-#alternatives(hide(frames.first()), ..frames.slice(0, -1))
+
+#alternatives(hide(frames.first()), ..frames)
 
 #{ v(1em) + pause * 4 }
 
@@ -398,21 +405,8 @@ For example, `grep` uses `-n` as an option:
 #pause-gap(gap: 0.6em)
 
 #[
-  #show terms: it => block(
-    inset: (x: 2em),
-    grid(
-      columns: (auto, 1fr),
-      row-gutter: 0.8em,
-      column-gutter: 0.6em,
-      ..it
-        .children
-        .map(item => (
-          grid.cell(align: right, item.term),
-          item.description,
-        ))
-        .flatten(),
-    ),
-  )
+  #set terms(spacing: 0.8em)
+  #show terms: terms-right-align
 
   #let b(it) = strong(text(fill: swat-colors.tertiary.darken(10%), it))
   #let y(it) = strong(text(fill: swat-colors.primary-light.darken(10%), it))
@@ -660,7 +654,201 @@ When in doubt, check the program's help or documentation.
 
 = How Programs Communicate
 
-// explain stdin/out/err
+== Three standard streams
+
+When a program runs, it can communicate through three standard *streams*:
+
+#pause-gap()
+
+// small hack to avoid `item-by-item` shifting
+// content between subslides
+#block(height: 4.6em, align(top, item-by-item[
+  #set terms(spacing: 1em)
+  #show terms: terms-right-align
+
+  / *standard input*: `stdin` -- data the program reads
+
+  / *standard output*: `stdout` -- its usual results
+
+  / *standard error*: `stderr` -- messages about problems or progress
+]))
+
+#pause-gap()
+
+These are separate channels, even when they all appear in the same terminal.
+
+== Standard output/error
+
+By default, both output and error streams appear in the terminal.
+
+#pause-gap(gap: 0.6em)
+
+#term-center(terminal-block(
+  width: 95%,
+  ```bash
+  echo "Hello!"
+
+  ls missing.txt
+  ```,
+))
+
+#pause-gap(gap: 0.6em)
+
+`echo` writes its result to *standard output*.
+
+`ls` writes an error message to *standard error*.
+
+#pause-gap(gap: 0.6em)
+
+They can look similar on screen, but the shell can handle them separately.
+
+== Redirecting output
+
+Use `>` to send standard output to a file instead of the terminal.
+
+#let frames = (
+  terminal-frames(
+    height: 100%,
+    commands: ("echo \"Hello!\" > greeting.txt", "cat greeting.txt", ""),
+    mode: "key-frames",
+  )
+    .map(term-center.with(height: 38%))
+    .slice(0, -1)
+)
+
+#alternatives(hide(frames.first()), ..frames)
+
+#{ v(1em) + pause * 5 }
+
+The first command writes to `greeting.txt`, so it does not print to the terminal.
+
+#pause-gap()
+
+`>` replaces the file's contents. Use `>>` to add to the end instead.
+
+== Redirecting errors
+
+Standard error is separate from standard output.
+
+#pause-gap(gap: 0.2em)
+
+// conch doesn't actually have a distinction between stdout/err
+// (it just colors stderr red and prints to stdout), so we fake
+// it ourselves (painstakingly) by running the bad command and
+// capturing the output, and hand-encoding the ANSI sequences
+// for the red output and the PS1 shell prompt
+
+#let stderr = conch.execute(commands: ("ls missing.txt",)).entries.at(0).output
+
+#let stderr = encode-ansi((text: stderr, styles: "bright-red"))
+
+#let prompt = encode-ansi(
+  (text: "swat@ksu", styles: "blue"),
+  (text: ":", styles: "cyan"),
+  (text: "~", styles: "magenta"),
+  (text: "$", styles: "cyan"),
+  " ",
+)
+
+#term-center(conch.terminal-frame(
+  width: 95%,
+  conch.render-ansi(
+    theme: terminal-theme,
+    prompt + "ls missing.txt > output.txt" + "\n" + stderr + prompt,
+  ),
+  style: (inset: (top: -0.4em, rest: 0.8em)),
+  ..term-style,
+))
+
+#pause-gap(gap: 0.2em)
+
+The `>` redirects standard output, but the error message still appears in the terminal.
+
+#pause-gap(gap: 0.2em)
+
+To redirect standard error, use `2>`.
+
+#pause
+
+#term-center(terminal-block(
+  width: 95%,
+  ```bash
+  ls missing.txt 2> errors.txt
+  ```,
+))
+
+== Redirecting input
+
+Use `<` to give a program input from a file.
+
+#pause-gap(gap: 0.6em)
+
+#term-center(terminal-block(
+  system: system(files: ("notes.txt": read("ex02/meeting notes.txt"))),
+  width: 95%,
+  ```bash
+  wc < notes.txt
+  ```,
+))
+
+#pause-gap()
+
+`wc` reads the contents of `notes.txt` as *standard input* and counts its lines.
+
+#pause-gap(gap: 0.6em)
+
+The program is still `wc`; the shell connects the file to its input.
+
+== Connecting programs with pipes
+
+A pipe (`|`) connects a program's standard output to another program's standard input.
+
+#pause-gap()
+
+#term-center(terminal-block(
+  system: system(files: ("notes.txt": read("ex02/meeting notes.txt"))),
+  width: 95%,
+  ```bash
+  cat notes.txt | wc -l
+  ```,
+))
+
+#pause-gap()
+
+`cat` writes the file's contents to standard output.
+
+The pipe sends that output to `wc` as standard input.
+
+#pause-gap(gap: 0.6em)
+
+`wc -l` counts the lines it receives.
+
+== Composing a small program
+
+Each program can do one small job. A pipe passes its output to the next program.
+
+#pause-gap()
+
+#term-center(terminal-frame(
+  width: 95%,
+  ```bash
+  grep TODO *.txt | wc -l
+  ```,
+))
+
+#pause-gap()
+
+`grep` finds lines containing `TODO` and writes them to standard output.
+
+The pipe sends those lines to `wc`, which counts them.
+
+#pause-gap(gap: 0.6em)
+
+Together, they count the matching lines.
+
+#pause-gap(gap: 0.6em)
+
+This is *composition*: combining programs so that one's result becomes another's input.
 
 = Scripting
 

@@ -103,3 +103,42 @@
   fill: fill,
   body: body,
 )
+
+
+#let terms-right-align(terms) = block(
+  inset: (x: 2em),
+  grid(
+    columns: (auto, 1fr),
+    row-gutter: terms.spacing,
+    column-gutter: 0.6em,
+    ..terms
+      .children
+      .map(item => (
+        grid.cell(align: right, item.term),
+        item.description,
+      ))
+      .flatten(),
+  ),
+)
+
+
+#let encode-ansi(..segments) = {
+  let esc = "\u{001b}["
+
+  let ansi-codes = (
+    blue: "34",
+    magenta: "35",
+    cyan: "36",
+    bright-red: "91",
+  )
+
+  let to-ansi(seg) = {
+    let styles = seg.at("styles", default: ())
+    if type(styles) != array { styles = (styles,) }
+
+    esc + styles.map(s => ansi-codes.at(s)).join(";") + "m" + seg.text + esc + "0m"
+  }
+
+  segments.map(seg => if type(seg) == str { (text: seg) } else { seg }).map(to-ansi).pos().join("")
+}
+
