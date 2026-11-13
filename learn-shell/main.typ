@@ -44,6 +44,14 @@
 
 #let system = system.with(hostname: "ksu")
 
+#let practice-system = system(files: (
+  "README.md": "Shell practice repo\nWork in data/; keep originals unchanged.\nSee tasks.md for activities.\n",
+  "data/ideas.txt": read("practice-repo/data/ideas.txt"),
+  "data/meeting notes.txt": read("practice-repo/data/meeting notes.txt"),
+  "data/project.txt": read("practice-repo/data/project.txt"),
+  "starter/summary.txt": read("practice-repo/starter/summary.txt"),
+))
+
 #let system-ex01 = system(
   files: (
     "ideas.txt": read("ex01/ideas.txt"),
@@ -126,338 +134,280 @@
 // look horribly large and out of place
 #show text.where(weight: "bold"): set text(weight: "medium")
 
+#let ar = sym.arrow.r
 
-= Getting Started
+= Let's Use The Shell
 
-== Installing a Shell
+#align(center)[
+  #text(size: 1.3em)[A few commands can save you a lot of clicking.]
 
-#cols(align: top)[
-  #align(center)[*Windows*]
+  #pause-gap(gap: 1.5em)
 
-  #link("https://git-scm.com/install/windows")
+  #rect(
+    width: 92%,
+    radius: 1em,
+    stroke: swat-colors.secondary,
+    inset: 1.2em,
+  )[
+    *We’ll:* find our way around #ar look at files #ar search #ar save the results
+  ]
 
-  Select the latest *Git for Windows*.
+  #pause-gap(gap: 1.5em)
 
-  Follow the installer instructions.
-
-  Open the Start Menu, search for *Git Bash*.
-
-  // TODO(@avalsch): detailed git install instructions:
-  // - git bash installer link (above)
-  // - winget install Git.Git (alt)
-  // - or use WSL for a full linux environment
-][
-  #align(center)[*Mac / Linux*]
-
-  You should already have a shell installed out of the box.
-
-  #side-by-side[/ Linux: `bash`][/ Mac: `zsh`]
-
-  Open your terminal/console application.
+  #text(size: 1.1em)[
+    Let’s find the TODOs in a small project and save the results.
+  ]
 ]
 
-== Many Shells
+== What we’ll do
 
-There are many shells available for you to choose from.
+#align(center)[
+  #set text(size: 1.2em)
 
-#pause-gap()
+  #show grid.cell: strong
 
-#side-by-side(align: top)[
-  #align(center)[*POSIX-Like*]
+  #grid(
+    columns: (1fr, 1fr),
+    gutter: 2.8em,
+    [Find your place], [Look through a project],
+    [Search for text], [Save what you found],
+  )
 
-  / `bash`: // TODO
+  #pause-gap(gap: 1.6em)
 
-  / `zsh`: // TODO
-][
-  #align(center)[*Other*]
-
-  / `fish`: friendly, interactive shell with slightly simpler syntax
-  / `pwsh`: cross-platform shell often used on Windows
-  / `nushell`: structured-data-focused shell
+  We’ll use the same small project for all of it.
 ]
 
+== Terminal, shell, program: which is which?
 
-== Terminals
+#align(center, fletcher-diagram(
+  node-inset: 1.2em,
+  node-outset: 0.8em,
+  node-corner-radius: 0.8em,
+  node-stroke: 0.1em,
+  edge-stroke: 0.1em,
+  spacing: 4em,
+  {
+    node((0, 0))[*You*]
+    edge("-|>")
+    node((1, 0))[*Terminal* window]
+    edge("-|>")
+    node((2, 0))[*Shell* reads commands]
+  },
+))
+
+#pause-gap(gap: 2em)
 
 The *terminal* is the app or window; the *shell* is the program interpreting what you type.
 
-#pause-gap(gap: 2em)
+#pause-gap()
 
 A terminal can run different shells, and a shell can run inside different terminal apps.
 
-#pause-gap(gap: 2em)
+#pause-gap()
 
-// TODO: analogy
-meaningful analogy here
+#align(center)[*Examples today use Bash:* Git Bash / WSL / macOS Terminal / Linux terminal.]
 
+== The question we'll work on
 
-= The Shell Runs Programs
+#align(center)[
 
-== A simple task
+  #text(size: 1.35em)[Where are the TODOs in these project notes?]
 
-Suppose you have a folder of notes, and you want to find every line that mentions `TODO`.
+  #pause-gap()
+
+  #rect(
+    width: 75%,
+    radius: 0.8em,
+    stroke: swat-colors.secondary,
+    inset: 1em,
+  )[
+    #let ar = h(0.4em) + ar + h(0.4em)
+
+    Make a guess #ar run a command #ar see what happens
+  ]
+
+  #pause-gap()
+
+  We’ll build up to a short report. Hints are there if you get stuck.
+]
+
+== First, get the practice files
+
+Clone the workshop repo from the link, then enter its folder:
+
+#v(1em)
+
+#align(center, codly.new(
+  width: 80%,
+  header: [clone the repo],
+  ```bash
+  git clone https://github.com/swat-ksu/shell-practice
+  cd shell-practice
+  ```,
+))
 
 #pause-gap()
 
-You could open files one by one, checking manually. Or, you could ask the computer:
+`git clone` gets the files. `cd` changes the shell’s current directory.
 
-#pause-gap()
+== Where am I?
+
+#term-center(terminal-block(width: 80%)[
+  ```bash
+  pwd
+  ```
+])
+
+#align(center)[
+  `pwd` prints the current directory -- your shell's "you are here."
+]
+
+#pause-gap(gap: 0.4em)
+
+#align(center)[Run `pwd`. Does the path end in `shell-practice`?]
+
+#pause-gap(gap: 0.4em)
+
+#align(
+  center,
+  text(fill: swat-colors.tertiary)[
+    If not, check the folder you cloned into.
+  ],
+)
+
+== What’s around me?
 
 #term-center(terminal-block(
-  system: system-ex01,
-  width: 95%,
+  width: 85%,
+  system: practice-system,
 )[
   ```bash
-  grep -n TODO *.txt
+  ls
   ```
 ])
 
 #pause-gap()
 
-The shell lets you give instructions to your computer and showing you what they return.
-
-#speaker-notes[
-  - grep is a program that searches text.
-
-  - the shell is not doing the search itself; it starts grep and passes it information.
-
-  - don't explain `*.txt` yet. revisit it with arguments and shell syntax.
+#align(center)[
+  `ls` lists the current directory. Think “open the folder view.”
 ]
 
-== Shell interaction flow
+#pause-gap()
 
-// TODO: make the diagram look prettier
+#align(center)[Which entry has the notes?]
+
+#pause-gap()
+
+#align(center)[Run `ls`, then `cd data` and `ls` again.]
+
+== Find your way back
 
 #align(center)[
-  #set text(size: 1.2em, weight: "medium")
+  #set text(size: 1.4em)
 
+  #block(align(left, stack(
+    spacing: 0.25em,
+    [`data/`],
+    [#h(-1.2em) #sym.arrow.t `cd ..`],
+    [project root],
+  )))
+]
+
+#pause-gap()
+
+#align(center, text(size: 1.2em)[
+  `cd folder` goes in. `cd ..` goes to the parent. `cd ~` goes home.
+])
+
+#pause-gap()
+
+#align(center, text(size: 1.2em)[
+  Go back to the project folder with `cd ..`. Use `pwd` to check.
+])
+
+== Read before you change
+
+#term-center(terminal-block(width: 88%, system: practice-system)[
+  ```bash
+  cat data/project.txt
+  ```
+])
+
+#pause-gap(gap: 0.6em)
+
+#align(center)[
+  `cat` prints a short file. For a long one, use `less`; press `q` to quit.
+]
+
+#pause-gap(gap: 0.6em)
+
+#align(center)[
+  Now show just the first three lines: `head -n 3 data/project.txt`.
+]
+
+= Read the command
+
+== Who handles what?
+
+#align(center)[
   #fletcher-diagram(
-    node-stroke: .2em,
-    node-inset: 1em,
-    node-corner-radius: 1em,
+    node-inset: 1.2em,
+    node-outset: 0.8em,
+    node-corner-radius: 0.8em,
+    node-stroke: 0.1em,
     edge-stroke: 0.1em,
-    spacing: 8em,
+    spacing: 4em,
     {
-      node((0, 0))[You]
-      edge("-|>")[`command`]
-      node((1, 0))[Shell]
-      edge("-|>")[`executes`]
-      node((2, 0))[Program]
-      edge((2, 0), (2, 0.6), (0, 0.6), (0, 0), "-|>")[`result`]
+      node((0, 0))[*Shell* prepares the request]
+      edge("-|>")
+      node((1, 0))[*Program* does the task]
     },
   )
+
+  #pause-gap(gap: 1.6em)
+
+  Consider `head -n 3 data/project.txt`.
+
+  The shell starts `head` and passes it the other pieces.
+
+  Then `head` has to decide what `-n 3` means.
+
+  #pause-gap()
+
+  #let d = strong(text(size: 1.4em, sym.dot))
+
+  A common shape is: #h(0.2em) `program` #d `options` #d `file/input`
 ]
 
-== What actually happens?
-
-The shell starts a program called `grep`, which finds the matching lines
-
-#pause-gap(gap: 2em)
-
-But the command we typed (`grep -n TODO *.txt`) has several pieces.
-
-#pause-gap(gap: 2em)
-
-What parts did the shell interpret, and which parts did `grep` recieve?
-
-
-= From Command Text to Arguments
-
-== The program receives arguments
-
-Let's look at a slightly simpler example:
-
-#pause-gap(gap: 0.4em)
-
-#term-center(
-  terminal-frame(
-    width: 95%,
-    ```bash
-      grep TODO ideas.txt project.txt
-    ```,
-  ),
-)
-
-#pause-gap(gap: 0.6em)
-
-The shell starts `grep` and gives it these arguments:
-
-#[
-  #set list(indent: 1.4em)
-
-  - `TODO`
-  - `ideas.txt`
-  - `project.txt`
-]
-
-#pause-gap(gap: 0.4em)
-
-Then, `grep` gets to decides what those strings mean.
-
-In this case, "search for `TODO` in `ideas.txt` and `project.txt`."
-
-== Quotes keep text together
-
-A file name can contain spaces:
-
-#pause
-
-#let commands = ("grep TODO meeting notes.txt", "grep TODO \"meeting notes.txt\"", "")
-
-#let frames(i) = layout(
-  size => terminal-frames(
-    width: size.width * 95%,
-    height: 100%,
-    commands: commands,
-    system: system(files: ("meeting notes.txt": read("ex02/meeting notes.txt"))),
-    mode: "key-frames",
-  )
-    .map(term-center.with(height: 60%))
-    .at(i),
-)
-
-// garbage code to work around a touying `alternatives-fn` bug
-#alternatives-match(
-  ("1": hide(frames(0)), ..range(4).map(i => (str(i + 2), frames(i))).to-dict()),
-)
-
-#uncover("5-")[
-  The quotes tell the shell to pass `"meeting notes.txt"` as *one* argument.]
-
-== Parameter expansion
-
-The shell can replace a variable reference like `$HOME` with its value.
-
-#pause
-
-#term-center(terminal-block(
-  system: system(
-    files: (
-      "Assignment 2/",
-      "example-pres.pdf",
-      "m2_assignment_2.docx",
-    )
-      .map(f => ("/home/swat/Downloads/" + f, ""))
-      .to-dict(),
-  ),
-  width: 95%,
-  ```bash
-  ls "$HOME/Downloads"
-  ```,
-))
-
-#pause-gap()
-
-`$HOME` expands to the current user's home directory.
-
-The double quotes keep the expanded path together as one argument.
-
-== Pathname expansion
-
-The shell can expand a pattern to matching filenames.
-
-#let frames = (
-  terminal-frames(
-    system: system(files: (
-      "notes.md": "",
-      ..system-ex01.files,
-    )),
-    // width: 95%,
-    height: 100%,
-    commands: ("ls", "echo *.txt", ""),
-    mode: "key-frames",
-  )
-    .map(term-center.with(height: 43%))
-    .slice(0, -1)
-)
-
-#alternatives(hide(frames.first()), ..frames)
-
-#{ v(1em) + pause * 4 }
-
-Before running `echo`, the shell replaces `*.txt` with matching filenames.
-
-The command receives the filenames as arguments; it does not receive the `*`.
-
-== Command substitution
-
-The shell can run a command and insert its output into another command.
-
-#pause
-
-#term-center(terminal-block(
-  width: 95%,
-  ```bash
-  echo "Today is $(date +%F)"
-  ```,
-))
-
-#pause-gap()
-
-The shell runs `date +%F`, then inserts its output into the command that starts `echo`.
-
-#pause-gap()
-
-The shell interprets the syntax. The program receives the resulting arguments.
-
-= How Programs Interpret Arguments
-
-== Options and positional arguments
-
-Programs often follow similar conventions when assigning meaning to their arguments.
-
-#pause-gap(gap: 0.6em)
-
-For example, `grep` uses `-n` as an option:
+== Take this command apart
 
 #term-center(terminal-frame(
   width: 95%,
   ```bash
-  grep -n TODO ideas.txt
+  grep -n TODO data/project.txt
   ```,
 ))
 
-#pause-gap(gap: 0.6em)
-
-`grep` receives arguments: #pause `["-n", "TODO", "ideas.txt"]`#pause, and interprets them as:
-
-#pause-gap(gap: 0.6em)
-
-#[
-  #set terms(spacing: 0.8em)
-  #show terms: terms-right-align
-
-  #let b(it) = strong(text(fill: swat-colors.tertiary.darken(10%), it))
-  #let y(it) = strong(text(fill: swat-colors.primary-light.darken(10%), it))
-  #let o(it) = strong(text(fill: swat-colors.primary.darken(10%), it))
-
-  / #b[`-n`]: an _option_ -- include line numbers.
-
-  / #y[`TODO`]: an _argument_ --  the text to search for.
-
-  / #o[`ideas.txt`]: an _argument_ -- the file to search.
-]
-
----
+#pause-gap(gap: 3.6em)
 
 #command-diagram(
-  (`grep`, `-n`, `TODO`, `ideas.txt`),
+  (`grep`, `-n`, `TODO`, `data/project.txt`),
 
   piece-spacing: 2,
-  text-size: 1.4em,
   raw-text-size: 1.4em,
 
   pinit-label(
     swat-colors.secondary,
     top,
     dx: 70%,
-  )[program],
+  )[search],
 
   pinit-label(
     swat-colors.tertiary,
     bottom,
     dx: 60%,
-  )[option: include line numbers],
+  )[include line numbers],
 
   pinit-label(
     swat-colors.primary-light,
@@ -471,76 +421,18 @@ For example, `grep` uses `-n` as an option:
     top,
     dx: -30%,
     fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
-  )[file],
+  )[file path],
 )
 
-== Options with values
+#pause-gap(gap: 3em)
 
-Some options take another argument as their value.
+#align(center)[
+  Options like `-n` are common, but each program has its own rules.
+]
 
-Here, `head` uses `-n` to specify how many lines to show.
-
-#pause-gap()
-
-#term-center(terminal-frame(
-  width: 95%,
-  ```bash
-  head -n 5 notes.txt
-  ```,
-))
-
-#pause-gap()
-
-Here, `-n` is an *option*, and `5` is its *option value*.
-
-#pause-gap()
-
-The exact convention depends on the program.
-
----
-
-#command-diagram(
-  (`head`, `-n`, `5`, `notes.txt`),
-
-  piece-spacing: 2,
-  text-size: 1.4em,
-  raw-text-size: 1.4em,
-
-  pinit-label(
-    swat-colors.secondary,
-    top,
-    dx: 70%,
-  )[program],
-
-  pinit-label(
-    swat-colors.tertiary,
-    bottom,
-    dx: -70%,
-  )[option],
-
-  pinit-label(
-    swat-colors.primary-light,
-    bottom,
-    dx: 100%,
-    fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
-  )[option value],
-
-  pinit-label(
-    swat-colors.primary,
-    top,
-    dx: -50%,
-    fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
-  )[positional argument],
-)
-
-== Subcommands
-
-Some programs use a *subcommand* to choose what action to perform.
-
-#pause-gap()
+== Some programs have subcommands
 
 #term-center(terminal-frame(
-  width: 95%,
   ```bash
   git status
   ```,
@@ -548,695 +440,718 @@ Some programs use a *subcommand* to choose what action to perform.
 
 #pause-gap()
 
-The shell starts the `git` program.
+#align(center)[
+  #set text(size: 1.1em)
 
-`git` interprets `status` as a subcommand: show the current state of the repository.
+  Here `git` is the program and `status` tells it what to do.
 
-#pause-gap()
+  #pause
 
-Other examples include `git log` and `git diff`.
-
-== Different conventions
-
-Many programs use options like `-v` or `--help`.
-
-But argument conventions are not universal.
-
-#pause-gap(gap: 0.8em)
-
-For example, `dd` uses `name=value` arguments:
-
-#term-center(terminal-frame(
-  width: 95%,
-  ```bash
-  dd if=input.txt of=copy.txt
-  ```,
-))
-
-#pause-gap(gap: 0.6em)
-
-Here, `if=input.txt` and `of=copy.txt` are arguments interpreted by `dd`'s rules.
-
-#pause-gap(gap: 1.2em)
-
-When in doubt, check the program's help or documentation.
-
-== Vocabulary recap
-
-#[
-  #set terms(indent: 0.6em, spacing: 2em)
-
-  / Command: what the user types, such as `grep -n TODO ideas.txt`.
-
-  / Program: the executable the shell starts, here `grep`.
-
-  / Argument: a string the shell passes to the program.
-
-  / Subcommand: an argument the program interprets as an action.
-
-  / Option: an argument the program interprets as a setting, often starting with `-` or `--`.
-
-  / Option value: an argument that supplies a value for an option.
-
-  / Positional argument: an argument the program interprets by its position.
+  You’ll see the same pattern in `git log` and `git diff`.
 ]
 
-== Annotated examples
+== Spaces need quotes
 
-#command-diagram(
-  (`git`, `clone`, `--branch`, `main`, `git@github.com:swat-ksu/org`),
+A filename with a space is still *one path*.
 
-  pinit-label(
-    swat-colors.secondary,
-    top,
-    dx: 100%,
-  )[command],
-
-  pinit-label(
-    swat-colors.tertiary,
-    bottom,
-    dx: 30%,
-  )[subcommand],
-
-  pinit-label(
-    swat-colors.primary-light,
-    top,
-    dx: 20%,
-    fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
-  )[option],
-
-  pinit-label(
-    swat-colors.primary,
-    bottom,
-    dx: 90%,
-    fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
-  )[option value: the target branch],
-
-  pinit-label(
-    green,
-    top,
-    dx: -30%,
-  )[positional argument: the target repo],
-)
-
----
-
-#command-diagram(
-  (`curl`, `--output`, `page.html`, `https://example.com`),
-
-  pinit-label(
-    swat-colors.secondary,
-    top,
-    dx: 100%,
-  )[program],
-
-  pinit-label(
-    swat-colors.tertiary,
-    bottom,
-    dx: 30%,
-  )[option],
-
-  pinit-label(
-    swat-colors.primary-light,
-    top,
-    dx: 20%,
-    fill: swat-colors.primary-light.transparentize(80%).saturate(40%),
-  )[option value],
-
-  pinit-label(
-    swat-colors.primary,
-    bottom,
-    dx: -50%,
-    fill: swat-colors.primary.lighten(10%).transparentize(70%).saturate(100%),
-  )[positional argument],
-)
-
-= How Programs Communicate
-
-== Three standard streams
-
-When a program runs, it can communicate through three standard *streams*:
-
-#pause-gap()
-
-// small hack to avoid `item-by-item` shifting
-// content between subslides
-#block(height: 4.6em, align(top, item-by-item[
-  #set terms(spacing: 1em)
-  #show terms: terms-right-align
-
-  / *standard input*: `stdin` -- data the program reads
-
-  / *standard output*: `stdout` -- its usual results
-
-  / *standard error*: `stderr` -- messages about problems or progress
-]))
-
-#pause-gap()
-
-These are separate channels, even when they all appear in the same terminal.
-
-== Standard output/error
-
-By default, both output and error streams appear in the terminal.
-
-#pause-gap(gap: 0.6em)
-
-#term-center(terminal-block(
-  width: 95%,
-  ```bash
-  echo "Hello!"
-
-  ls missing.txt
-  ```,
-))
-
-#pause-gap(gap: 0.6em)
-
-`echo` writes its result to *standard output*.
-
-`ls` writes an error message to *standard error*.
-
-#pause-gap(gap: 0.6em)
-
-They can look similar on screen, but the shell can handle them separately.
-
-== Redirecting output
-
-Use `>` to send standard output to a file instead of the terminal.
-
-#let frames = (
-  terminal-frames(
-    height: 100%,
-    commands: ("echo \"Hello!\" > greeting.txt", "cat greeting.txt", ""),
-    mode: "key-frames",
-  )
-    .map(term-center.with(height: 38%))
-    .slice(0, -1)
-)
-
-#alternatives(hide(frames.first()), ..frames)
-
-#{ v(1em) + pause * 5 }
-
-The first command writes to `greeting.txt`, so it does not print to the terminal.
-
-#pause-gap()
-
-`>` replaces the file's contents. Use `>>` to add to the end instead.
-
-== Redirecting errors
-
-Standard error is separate from standard output.
-
-#pause-gap(gap: 0.2em)
-
-// conch doesn't actually have a distinction between stdout/err
-// (it just colors stderr red and prints to stdout), so we fake
-// it ourselves (painstakingly) by running the bad command and
-// capturing the output, and hand-encoding the ANSI sequences
-// for the red output and the PS1 shell prompt
-
-#let stderr = conch.execute(commands: ("ls missing.txt",)).entries.at(0).output
-
-#let stderr = encode-ansi((text: stderr, styles: "bright-red"))
-
-#let prompt = encode-ansi(
-  (text: "swat@ksu", styles: "blue"),
-  (text: ":", styles: "cyan"),
-  (text: "~", styles: "magenta"),
-  (text: "$", styles: "cyan"),
-  " ",
-)
-
-#term-center(conch.terminal-frame(
-  width: 95%,
-  conch.render-ansi(
-    theme: terminal-theme,
-    prompt + "ls missing.txt > output.txt" + "\n" + stderr + prompt,
-  ),
-  style: (inset: (top: -0.4em, rest: 0.8em)),
-  ..term-style,
-))
-
-#pause-gap(gap: 0.2em)
-
-The `>` redirects standard output, but the error message still appears in the terminal.
-
-#pause-gap(gap: 0.2em)
-
-To redirect standard error, use `2>`.
-
-#pause
-
-#term-center(terminal-block(
-  width: 95%,
-  ```bash
-  ls missing.txt 2> errors.txt
-  ```,
-))
-
-== Redirecting input
-
-Use `<` to give a program input from a file.
-
-#pause-gap(gap: 0.6em)
-
-#term-center(terminal-block(
-  system: system(files: ("notes.txt": read("ex02/meeting notes.txt"))),
-  width: 95%,
-  ```bash
-  wc < notes.txt
-  ```,
-))
-
-#pause-gap()
-
-`wc` reads the contents of `notes.txt` as *standard input* and counts its lines.
-
-#pause-gap(gap: 0.6em)
-
-The program is still `wc`; the shell connects the file to its input.
-
-== Connecting programs with pipes
-
-A pipe (`|`) connects a program's standard output to another program's standard input.
-
-#pause-gap()
-
-#term-center(terminal-block(
-  system: system(files: ("notes.txt": read("ex02/meeting notes.txt"))),
-  width: 95%,
-  ```bash
-  cat notes.txt | wc -l
-  ```,
-))
-
-#pause-gap()
-
-`cat` writes the file's contents to standard output.
-
-The pipe sends that output to `wc` as standard input.
-
-#pause-gap(gap: 0.6em)
-
-`wc -l` counts the lines it receives.
-
-== Composing a small program
-
-Each program can do one small job. A pipe passes its output to the next program.
-
-#pause-gap()
-
-#term-center(terminal-frame(
-  width: 95%,
-  ```bash
-  grep TODO *.txt | wc -l
-  ```,
-))
-
-#pause-gap()
-
-`grep` finds lines containing `TODO` and writes them to standard output.
-
-The pipe sends those lines to `wc`, which counts them.
-
-#pause-gap(gap: 0.6em)
-
-Together, they count the matching lines.
-
-#pause-gap(gap: 0.6em)
-
-This is *composition*: combining programs so that one's result becomes another's input.
-
-= Scripting
-
-== From a command to a script
-
-A script is a file containing shell commands.
-
-#pause-gap(gap: 0.4em)
-
-Save a command we already know in `find-todos.sh`:
+#let commands = ("grep TODO data/meeting notes.txt", "grep TODO \"data/meeting notes.txt\"", "")
 
 #let frames(i) = layout(
   size => terminal-frames(
     width: size.width * 95%,
     height: 100%,
-    commands: (
-      "echo \"grep TODO *.txt\" > find-todos.sh",
-      "bash find-todos.sh",
-      "",
-    ),
-    system: system-ex01,
+    commands: commands,
+    system: practice-system,
     mode: "key-frames",
   )
-    .map(term-center.with(height: 60%))
+    .map(term-center.with(height: 50%))
     .at(i),
 )
 
 // garbage code to work around a touying `alternatives-fn` bug
 #alternatives-match(
-  ("1": hide(frames(0)), ..range(4).map(i => (str(i + 2), frames(i))).to-dict()),
+  ("1": hide(frames(0)), ..range(4).map(i => (str(i + 2), frames(i))).to-dict(), "5": frames(4)),
 )
 
-#v(0.6em)
-
-Then run the script with Bash.
-
-== Reuse values with variables
-
-Instead of repeating a value, store it in a variable:
-
-#pause-gap()
-
-#codly.new(
-  header: [find-todos-variable.sh],
-  raw(block: true, lang: "bash", read("scripts/find-todos-variable.sh")),
-)
-
-#pause-gap()
-
-The shell expands `"$search"` and `"$file"` before running `grep`.
-
-== Make a decision
-
-Use a conditional to do different things depending on whether a command succeeds.
-
-#codly.new(
-  header: [has-todos.sh],
-  raw(block: true, lang: "bash", read("scripts/has-todos.sh")),
-)
-
-#pause
-
-#term-center(
-  height: 42%,
-  terminal-block(
-    system: system(files: (
-      "has-todos.sh": read("scripts/has-todos.sh"),
-      "notes.md": "",
-      ..system-ex01.files,
-    )),
-    width: 100%,
-  )[
-    ```bash
-    bash has-todos.sh notes.md
-    bash has-todos.sh meeting.txt
-    ```
-  ],
-)
-
-== Repeat a task
-
-Use a loop to run a command for each matching file.
-
-#codly.new(
-  header: [repeat.sh],
-  raw(block: true, lang: "bash", read("scripts/repeat.sh")),
-)
-
-#pause-gap(gap: 0.6em)
-
-The loop repeats the commands inside it for each `.txt` file.
-
-#term-center(
-  height: 42%,
-  terminal-block(
-    system: system(files: (
-      "repeat.sh": ```bash
-      output=''
-      for file in *.txt; do
-        output+="$file TODO count: $(grep TODO "$file" | wc -l)"$'\n'
-      done
-      printf '%s' "$output"
-      ```.text,
-      "meeting.txt": system-ex01.files.at("meeting.txt"),
-      "project.txt": system-ex01.files.at("project.txt"),
-    )),
-    width: 100%,
-  )[
-    ```bash
-    bash repeat.sh
-    ```
-  ],
-)
-
-== Name a reusable step
-
-A function gives a name to a group of commands.
-
-#pause-gap(gap: 0.6em)
-
-#term-center(terminal-block(
-  system: system(files: ("meeting notes.txt": read("ex02/meeting notes.txt"))),
-  width: 95%,
-)[
-  ```bash
-  show-todos() {
-    grep TODO "$1"
-  }
-
-  show-todos "meeting notes.txt"
-  ```])
-
-#pause-gap(gap: 0.6em)
-
-Functions help organize scripts into named steps.
-
-= Advanced Features
-
-== Environment variables
-
-Environment variables are values made available to programs.
-
-#pause-gap()
-
-For example, `HOME` contains the path to your home directory.
-
-`PATH` is another environment variable. It lists where the shell looks for programs.
-
-#pause-gap()
-
-#side-by-side(
-  term-center(terminal-block(width: 100%)[
-    ```bash
-    echo "$HOME"
-    ```
-  ]),
-  term-center(terminal-block(width: 100%)[
-    ```bash
-    echo "$PATH"
-    ```
-  ]),
-)
-
-== Interrupting a Running Program
-
-Some programs keep running until they finish or are interrupted.
-
-#pause-gap()
-
-Start a command that runs for a while:
-
-#term-center(terminal-frame(
-  ```bash
-  sleep 300
-  ```,
-))
-
-#pause-gap()
-
-Press `Ctrl+C` to interrupt it.
-
-The shell sends an interrupt signal to the foreground program.
-
-== File Permissions
-
-Permissions control who can read, modify, or execute a file.
-
-#pause-gap()
-
-Use `ls -l` to inspect a file's permissions:
-
-#pause-gap()
-
-#let system-scripts = system(files: (
-  "has-todos.sh": (
-    content: read("scripts/has-todos.sh"),
-    mode: 755,
-  ),
-  "find-todos.sh": (
-    content: read("scripts/find-todos-variable.sh"),
-    mode: 755,
-  ),
-  "repeat.sh": (
-    content: read("scripts/repeat.sh"),
-    mode: 755,
-  ),
-))
-
-#term-center(terminal-block(
-  width: 95%,
-  system: system-scripts,
-)[
-  ```bash
-  ls -l
-  ```
-])
-
----
-
-A script can be made executable with `chmod`:
-
-#pause
-
-#let system-chmod = system(files: (
-  "find-todos.sh": (
-    content: ```bash
-    #!/bin/bash
-
-    grep TODO *.txt
-    ```.text,
-    mode: 755,
-  ),
-))
-
-#term-center(terminal-frame(
-  width: 95%,
-  system: system-chmod,
-  ```bash chmod u+x find-todos.sh```,
-))
-
-#pause
-
-Then, if the script has a shebang, it can be run directly:
-
-#pause
-
-#term-center(terminal-block(
-  width: 95%,
-  system: system(
-    files: (:..system-chmod.files, ..system-ex01.files),
-  ),
-)[
-  ```bash
-  ./find-todos.sh
-  ```
-])
-
-= Tips & Best Practices
-
-== Ask for Help
-
-Many programs provide a quick summary of their options:
-
-#v(0.2em)
-
-#term-center(terminal-frame(
-  ```bash
-  grep --help
-  ```,
-))
-
-#pause-gap(gap: 0.4em)
-
-For more detail, try the manual page:
-
-#v(0.2em)
-
-#term-center(terminal-frame(
-  ```bash
-  man grep
-  ```,
-))
-
-#pause-gap(gap: 0.4em)
-
-Not every program supports the same help options.
-
-Check the program's documentation when these don't work.
-
-== Use Your Shell's Shortcuts
-
-*Tab* completes a command or filename.
-
-*Ctrl+R* searches command history in many Bash and Zsh setups.
-
-Use #strong(sym.arrow.t) to revisit the previous command.
-
-#pause-gap()
-
-These shortcuts can save typing and help you reuse commands.
-
-== Be Careful with Commands That Change Things
-
-Commands can overwrite files, delete data, or affect more than you expect.
-
-#pause-gap()
-
-Before running an unfamiliar command:
-
-#pause
-
-#block(height: 4.6em, item-by-item[
-  - Read the command and its options.
-
-  - Check which files or directories it will affect.
-
-  - Try it first on sample data when possible.
-])
-
-
-== Don't Run Code You Haven't Inspected
-
-A command like this downloads a script and immediately runs it:
-
-#v(0.8em)
-
-#term-center(terminal-frame(
-  width: 95%,
-  ```bash
-  curl https://example.com/install.sh | sh
-  ```,
-))
-
-#pause-gap(gap: 1.4em)
-
-That means you run the downloaded code without reviewing it first.
-
-#pause-gap(gap: 1.4em)
-
-Prefer instructions from trusted sources, and inspect scripts before executing.
-
-= Helpful Resources
-
-== Where to Look Things Up
-
-#[
-  #set terms(indent: 1em, spacing: 1.5em)
-
-  / `--help`: a quick overview from a program.
-
-  / `man`: detailed manuals on many Unix-like systems.
-
-  / `tldr`: concise examples for common commands.
-
-  / Shell documentation: useful when syntax differs between shells.
+#uncover("4-")[
+  The quotes tell the shell to pass `"meeting notes.txt"` as *one* argument.
 ]
 
+// TODO: drop last slide?
+
+== One pattern, several files
+
+#term-center(terminal-frame(
+  width: 90%,
+  system: practice-system,
+  ```bash
+  grep -n TODO data/*.txt
+  ```,
+))
+
 #pause-gap()
 
-For example:
+#align(center)[
+  Here `*.txt` matches all the files ending in `.txt`.
 
-#figure(
-  term-center(terminal-frame(
-    ```bash
-    tldr grep
-    ```,
-  )),
-  caption: [(_requires `tldr`; installed seperately_)],
-  supplement: none,
+  #pause-gap(gap: 0.4em)
+
+  The shell turns that pattern into a list of paths before `grep` runs.
+
+  #pause-gap(gap: 0.4em)
+
+  The `*` is a pattern, not a search for a literal asterisk.
+]
+
+== Try it yourself: search the notes
+
+#align(center)[
+  #rect(
+    width: 75%,
+    radius: 0.8em,
+    stroke: swat-colors.tertiary,
+    inset: 1.2em,
+  )[
+    #set text(size: 1.2em)
+
+    Find every TODO line, with its line number.
+  ]
+
+  #pause-gap()
+
+  Hint: start with `grep -n`, then add the word and the file paths.
+]
+
+= Make a useful result
+
+== Save the result
+
+#term-center(
+  terminal-frames(
+    system: practice-system,
+    width: 95%,
+    style: (inset: (top: -0.4em, rest: 0.8em)),
+    commands: ("grep -n TODO data/*.txt > todos.txt", "cat todos.txt"),
+  ).last(),
 )
 
-#focus-slide[Thanks!]
+#pause-gap()
+
+#align(center)[
+  `>` sends the regular output to a file. If that file already exists, it replaces its contents.
+]
+
+== Passing results with pipes
+
+#align(center)[
+  #set text(size: 1.1em)
+
+  #fletcher-diagram(
+    node-stroke: .1em,
+    node-inset: 0.8em,
+    node-corner-radius: 1em,
+    node-outset: 1em,
+    edge-stroke: 0.1em,
+    spacing: 5em,
+    {
+      node((0, 0))[*`grep`* \ find matching lines]
+      edge("-|>")
+      node((1, 0))[*`wc`* \ count lines]
+    },
+  )
+]
+
+#pause-gap(gap: 0.4em)
+
+#term-center(terminal-block(width: 74%, system: practice-system)[
+  ```bash
+  grep TODO data/*.txt | wc -l
+  ```
+])
+
+#pause-gap(gap: 0.4em)
+
+#align(center)[
+  `grep` prints the matching lines; `|` passes them to `wc` to count.
+
+  #pause
+
+  This counts *matching lines*, not the number of TODO words.
+]
+
+== Your safe workspace
+
+#align(center)[
+  Create and inspect a practice folder:
+]
+
+#term-center(terminal-block(width: 90%, system: practice-system)[
+  ```bash
+  mkdir practice
+  ls
+  ```
+])
+
+#pause-gap(gap: 1.2em)
+
+#align(center)[
+  _Before changing files, check where you are and what the command will touch._
+]
+
+== Common file actions
+
+#align(center)[
+  #let d = strong(text(size: 1.4em, sym.dot))
+
+  #block(
+    width: 80%,
+    grid(
+      columns: (1fr, 1fr),
+      // gutter: 1em,
+      row-gutter: 0.8em,
+      [`mkdir` #d create a folder], [`touch` #d create an empty file],
+      [`cp` #d copy], [`mv` #d move or rename],
+    ),
+  )
+
+  #pause-gap(gap: 1.8em)
+
+  `rm` deletes. There's no undo. We won’t need it for today’s tasks.
+
+  #pause-gap()
+
+  Read the command first. Check the target.
+
+  Then make sure it did what you expected.
+]
+
+== Your turn: make a small report
+
+#align(center)[
+  Copy a starter note into `practice/`, then save its TODO lines.
+
+  #let ar = h(0.4em) + strong(text(fill: swat-colors.tertiary.darken(30%), ar)) + h(0.4em)
+
+  `cp` copies #ar `grep` searches #ar `>` saves #ar `cat` verifies
+
+  #v(1em)
+
+  #rect(
+    width: 78%,
+    radius: 0.8em,
+    stroke: swat-colors.tertiary,
+    inset: 1em,
+  )[
+    #set text(size: 1.05em)
+
+    Take a few minutes. Work with a neighbor if you like.
+  ]
+
+  #v(1em)
+
+  You’re done when `practice/report.txt` contains the matching lines.
+]
+
+== What if there are no matches?
+
+#align(center)[
+  #stack(
+    dir: ltr,
+    spacing: 2em,
+    rect(width: 32%, radius: 0.8em, stroke: swat-colors.secondary, inset: 1em)[
+      `grep TODO file` \ found a match
+    ],
+    text(size: 1.5em)[or],
+    rect(width: 32%, radius: 0.8em, stroke: swat-colors.tertiary, inset: 1em)[`grep TODO file` \ no match],
+  )
+
+  #pause-gap()
+
+  That’s a normal result, not necessarily an error.
+
+  A command can also signal success or failure to the shell.
+
+  #pause-gap()
+
+  Try searching for a word you know isn’t there.
+]
+
+== Put commands in a file
+
+#align(center)[
+  #set text(size: 1.1em)
+
+  A shell script is just commands saved in a file. Bash can run the file for you.
+
+  #pause-gap(gap: 0.4em)
+
+  #codly.new(
+    header: [report.sh],
+    width: 80%,
+    ```bash
+    grep -n TODO data/*.txt > todos.txt
+    cat todos.txt
+    ```,
+  )
+
+  #pause-gap(gap: 0.4em)
+
+  Run it from the project root with `bash report.sh`.
+
+  You can write or edit it in any text editor.
+]
+
+= More Shell Features
+
+There are a few more shell features worth knowing by name.
+
+#pause-gap()
+
+We'll go through them quickly here; you can come back to the examples later.
+
+== Variables hold on to a value
+
+#[
+  #set text(size: 1.2em)
+
+  #codly.new(
+    header: [Search a chosen file],
+    ```bash
+    search=TODO
+    file="data/meeting notes.txt"
+    grep "$search" "$file"
+    ```,
+  )
+
+  #v(1.4em)
+
+  Before `grep` runs, the shell substitutes the values of `search` and `file`. Keep the quotes, especially when a value may contain spaces.
+]
+
+== Quotes do different things
+
+#[
+  #set text(size: 1.2em)
+
+  #codly.new(
+    header: [Single quotes and double quotes],
+    ```bash
+    name="Sam"
+    echo "$name"
+    echo '$name'
+    ```,
+  )
+
+  #v(0.8em)
+
+  Double quotes still allow `$name` to expand. Single quotes keep the text literal. Quote variable expansions unless you have a reason not to.
+]
+
+== A backslash can protect one character
+
+#[
+  #set text(size: 1.2em)
+
+  #codly.new(
+    header: [Escape a space],
+    ```bash
+    grep TODO data/meeting\ notes.txt
+    ```,
+  )
+
+  #v(0.8em)
+
+  The backslash tells the shell to treat the space as part of the filename.
+
+  Quoting the whole path is usually simpler, but you may see this form too.
+]
+
+== Run the next command conditionally
+
+#[
+  #set text(size: 1.2em)
+
+  #codly.new(
+    header: [Command separators],
+    ```bash
+    grep TODO data/project.txt && echo "found TODOs"
+    grep ABSENT data/project.txt || echo "no match"
+    ```,
+  )
+
+  #v(0.8em)
+
+  `;` runs commands one after another. `&&` runs the next command only if the first succeeds; `||` runs it if the first fails. The example’s message is intentionally broad: a failed `grep` could mean no match or a missing file.
+]
+
+== Commands report success or failure
+
+#[
+  #set text(size: 1.2em)
+  #codly.new(
+    header: [Exit status],
+    ```bash
+    grep -q TODO data/project.txt
+    echo "$?"
+    ```,
+  )
+
+  #v(0.8em)
+
+  `$?` is the exit status of the command just run.
+
+  By convention, `0` means success and a nonzero value means failure.
+
+  `grep` uses this to distinguish "found" from "not found."
+]
+
+== A script can take an argument
+
+#[
+  #set text(size: 1.2em)
+
+  #codly.new(
+    header: [search-file.sh],
+    raw(
+      block: true,
+      lang: "bash",
+      ```bash
+      grep -n "$1" "$2"
+      ```.text,
+    ),
+  )
+
+  #v(1.4em)
+
+  // TODO: put in term
+
+  Run it as `bash search-file.sh TODO "data/meeting notes.txt"`.
+
+  `$1` and `$2` are the first and second arguments after the script name.
+
+  Quote them just like other variable values.
+]
+
+== Make a choice based on a command
+
+#[
+  #set text(size: 1.2em)
+
+  #codly.new(
+    header: [has-todos.sh],
+    ```bash
+    if grep -q TODO "$1"; then
+      echo "Found TODOs"
+    else
+      echo "No TODOs found"
+    fi
+    ```,
+  )
+
+  #v(0.6em)
+
+  `if` branches on whether `grep` found a match.
+
+  The `-q` option keeps `grep` quiet; the script prints the message instead.
+]
+
+== Repeat a command for several files
+
+#align(center)[
+  #set text(size: 1.2em)
+
+  #codly.new(
+    width: 86%,
+    header: [count-todos.sh],
+    ```bash
+    for file in data/*.txt; do
+      printf '%s: ' "$file"
+      grep -c TODO "$file"
+    done
+    ```,
+  )
+
+  #v(0.6em)
+
+  The loop runs once for each path matched by `data/*.txt`.
+
+  On each pass, `file` holds that path.
+]
+
+== Give a group of commands a name
+
+#[
+  #set text(size: 1.2em)
+
+  #codly.new(
+    header: [A small function],
+    ```bash
+    show-todos() {
+      grep -n TODO "$1"
+    }
+
+    show-todos "data/meeting notes.txt"
+    ```,
+  )
+
+  #v(0.6em)
+
+  If a script uses the same group of commands many times, it can be useful to give them a name.  Here, `$1` is the filename passed to the function.
+]
+
+
+== Three streams in and out
+
+#align(center)[
+  #set text(size: 1.2em)
+
+  #cols(
+    gutter: 0.8em,
+    [*`stdin`* \ input],
+    [*`stdout`* \ usual output],
+    [*`stderr`* \ errors and messages],
+  )
+
+  #v(2em)
+
+  They often appear together in the terminal, but they’re separate.
+
+  That’s why redirecting regular output doesn’t hide error messages.
+]
+
+== Redirect output -- or input
+
+#align(center)[
+  #set text(size: 1.2em)
+
+  #codly.new(
+    width: 90%,
+    header: [Redirection],
+    ```bash
+    echo "first line" > notes.txt
+    echo "another line" >> notes.txt
+    wc -l < notes.txt
+    ```,
+  )
+
+  #v(0.6em)
+
+  `>` creates or replaces a file; `>>` adds to the end.
+
+  `<` passes the contents of a file to a program's input.
+
+  #pause-gap(gap: 0.2em)
+
+  Be careful with `>`: it overwrites the destination before the command runs.
+]
+
+== Errors have their own stream
+
+#align(center)[
+  #set text(size: 1.2em)
+
+  #codly.new(
+    width: 80%,
+    header: [Redirect just the error],
+    ```bash
+    ls missing-file 2> errors.txt
+    cat errors.txt
+    ```,
+  )
+
+  #v(1em)
+
+  `2>` redirects standard error. The `2` is the file descriptor number.
+]
+
+== Put both streams in one log
+
+#[
+  #set text(size: 1.2em)
+
+  #term-center(terminal-frame(
+    width: 90%,
+    ```bash
+    some-command > run.log 2>&1
+    ```,
+  ))
+
+  This sends standard output to `run.log`, then sends standard error to the same place. The order matters: `2>&1` means "send errors wherever output is going now."
+]
+
+== Substitute a command’s result
+
+#align(center)[
+  #set text(size: 1.2em)
+
+  #term-center(terminal-block(width: 90%)[
+    ```bash
+    echo "Today is $(date +%F)"
+    ```
+  ])
+
+  #v(1em)
+
+  `$(...)` runs the command in the parentheses and puts its output here.
+
+  This is called *command substitution*.
+]
+
+== Values the shell inherits
+
+#align(center)[
+  #set text(size: 1.2em)
+
+  #term-center(terminal-block(width: 100%)[
+    ```bash
+    echo "$HOME"
+    echo "$PATH"
+    ```,
+  ])
+
+  #v(0.6em)
+
+  `HOME` is your home folder. `PATH` lists where the shell looks for programs.
+
+  Both are *environment variables*: settings passed to launched programs.
+]
+
+== Some commands live inside the shell
+
+#[
+  #set text(size: 1.1em)
+
+  #term-center(terminal-block(width: 90%)[
+    ```bash
+    type cd
+    ```,
+  ])
+
+  #v(0.6em)
+
+  `type` can identify a builtin, alias, function, or executable.
+
+  `cd` must be a builtin: a separate program can't change the current directory of the shell that launched it. Other useful builtins include `read` and `export`.
+
+  `type` is Bash-specific; other shells have their own ways to inspect commands.
+]
+
+== Find files by name
+
+#[
+  #set text(size: 1.1em)
+
+  #term-center(terminal-frame(
+    width: 80%,
+    ```bash
+    find data -type f -name '*.txt'
+    ```,
+  ))
+
+  #v(0.6em)
+
+  `find` walks through directories and prints paths that match. The quotes keep `*.txt` for `find` to interpret, rather than letting the shell expand it first.
+]
+
+== Run something in the background
+
+#term-center(
+  terminal-frames(
+    system: practice-system,
+    width: 95%,
+    style: (inset: (top: -0.4em, rest: 0.8em)),
+    commands: ("grep -n TODO data/*.txt > todos.txt", "cat todos.txt"),
+  ).last(),
+)
+
+#v(0.4em)
+
+An `&` at the end starts a command in the background, so you get the prompt back. `jobs` lists background jobs in this shell; `fg` brings one to the front.
+
+`Ctrl+C` interrupts a foreground command. For a background job, bring it forward with `fg` first, or use `kill` carefully.
+
+== Scripts can be run directly, too
+
+#[
+  #set text(size: 1.2em)
+
+  A script can start with a *shebang*, such as `#!/bin/bash`, and be marked executable with `chmod +x script.sh`.
+
+  #v(1em)
+
+  Then run it with `./script.sh`.
+
+  For a first script, `bash script.sh` is simpler and needs no extra setup.
+]
+
+== If a command won’t stop
+
+#align(center, text(size: 1.4em)[
+  Press *`Ctrl+C`* to interrupt the currently running program.
+
+  #v(0.6em)
+
+  It stops that program; it doesn’t close the terminal.
+])
+
+== Find help when you forget
+
+#align(center)[
+  #set text(size: 1.2em)
+
+  #term-center(terminal-frame(
+    width: 100%,
+    ```bash
+    grep --help
+    ```,
+  ))
+
+  #v(1em)
+
+  #let d = strong(text(size: 1.4em, sym.dot))
+
+  Use `--help` for options. Manuals (`man`) and `tldr` are other routes.
+
+  #v(0.6em)
+
+  `Tab` completes names #d `Ctrl+R` searches history.
+]
+
+== So what does the shell do?
+
+#align(center)[
+  #fletcher-diagram(
+    node-stroke: .1em,
+    node-inset: 0.6em,
+    node-corner-radius: 1em,
+    node-outset: 1em,
+    edge-stroke: 0.1em,
+    spacing: 6em,
+    {
+      node(
+        (0, 0),
+        stroke: swat-colors.secondary,
+      )[*You* \ ask a question]
+      edge("-|>")[`command`]
+      node(
+        (1, 0),
+        stroke: swat-colors.tertiary,
+      )[*Shell* \ prepares arguments]
+
+      edge("-|>")[`executes`]
+
+      node(
+        (2, 0),
+        stroke: swat-colors.primary-light,
+      )[*Programs* \ do small jobs]
+
+      edge(
+        (2, 0),
+        (2, 0.6),
+        (0, 0.6),
+        (0, 0),
+        "-|>",
+      )[`result`]
+    },
+  )
+]
