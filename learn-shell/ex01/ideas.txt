@@ -1,0 +1,4 @@
+Possible demos
+Show how to find the current directory.
+TODO: Prepare a folder with a few sample files.
+Use short commands with visible output.

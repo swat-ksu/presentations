@@ -1,0 +1,4 @@
+Shell workshop project notes
+We need examples that work on Mac, Linux, and Windows.
+TODO: Ask everyone which terminal they use.
+Keep the first exercise under five minutes.

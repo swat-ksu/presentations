@@ -1,0 +1,4 @@
+Workshop planning
+The audience is new to the command line.
+Brendan will review the examples.
+TODO: Check that the demo works in Bash.
