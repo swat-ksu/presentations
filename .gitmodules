@@ -1,0 +1,3 @@
+[submodule "learn-shell/practice-repo"]
+	path = learn-shell/practice-repo
+	url = https://github.com/swat-ksu/shell-practice
