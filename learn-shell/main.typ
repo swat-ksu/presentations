@@ -1004,16 +1004,126 @@ A function gives a name to a group of commands.
 
 Functions help organize scripts into named steps.
 
-// variables
-// control flow (conditionals, loops, functions)
-// composability
-
 = Advanced Features
 
-// environment variables
-// PATH
-// signals
-// unix permissions
+== Environment variables
+
+Environment variables are values made available to programs.
+
+#pause-gap()
+
+For example, `HOME` contains the path to your home directory.
+
+`PATH` is another environment variable. It lists where the shell looks for programs.
+
+#pause-gap()
+
+#side-by-side(
+  term-center(terminal-block(width: 100%)[
+    ```bash
+    echo "$HOME"
+    ```
+  ]),
+  term-center(terminal-block(width: 100%)[
+    ```bash
+    echo "$PATH"
+    ```
+  ]),
+)
+
+== Interrupting a Running Program
+
+Some programs keep running until they finish or are interrupted.
+
+#pause-gap()
+
+Start a command that runs for a while:
+
+#term-center(terminal-frame(
+  ```bash
+  sleep 300
+  ```,
+))
+
+#pause-gap()
+
+Press `Ctrl+C` to interrupt it.
+
+The shell sends an interrupt signal to the foreground program.
+
+== File Permissions
+
+Permissions control who can read, modify, or execute a file.
+
+#pause-gap()
+
+Use `ls -l` to inspect a file's permissions:
+
+#pause-gap()
+
+#let system-scripts = system(files: (
+  "has-todos.sh": (
+    content: read("scripts/has-todos.sh"),
+    mode: 755,
+  ),
+  "find-todos.sh": (
+    content: read("scripts/find-todos-variable.sh"),
+    mode: 755,
+  ),
+  "repeat.sh": (
+    content: read("scripts/repeat.sh"),
+    mode: 755,
+  ),
+))
+
+#term-center(terminal-block(
+  width: 95%,
+  system: system-scripts,
+)[
+  ```bash
+  ls -l
+  ```
+])
+
+---
+
+A script can be made executable with `chmod`:
+
+#pause
+
+#let system-chmod = system(files: (
+  "find-todos.sh": (
+    content: ```bash
+    #!/bin/bash
+
+    grep TODO *.txt
+    ```.text,
+    mode: 755,
+  ),
+))
+
+#term-center(terminal-frame(
+  width: 95%,
+  system: system-chmod,
+  ```bash chmod u+x find-todos.sh```,
+))
+
+#pause
+
+Then, if the script has a shebang, it can be run directly:
+
+#pause
+
+#term-center(terminal-block(
+  width: 95%,
+  system: system(
+    files: (:..system-chmod.files, ..system-ex01.files),
+  ),
+)[
+  ```bash
+  ./find-todos.sh
+  ```
+])
 
 = Tips & Best Practices
 
