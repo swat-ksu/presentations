@@ -45,7 +45,6 @@
 #let system = system.with(hostname: "ksu")
 
 #let practice-system = system(files: (
-  "README.md": "Shell practice repo\nWork in data/; keep originals unchanged.\nSee tasks.md for activities.\n",
   "data/ideas.txt": read("practice-repo/data/ideas.txt"),
   "data/meeting notes.txt": read("practice-repo/data/meeting notes.txt"),
   "data/project.txt": read("practice-repo/data/project.txt"),
