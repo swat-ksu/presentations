@@ -1127,12 +1127,116 @@ Then, if the script has a shebang, it can be run directly:
 
 = Tips & Best Practices
 
-// tips (e.g., ctrl+R to search history)
-// --help
-// don't run `curl ... | sh`
+== Ask for Help
+
+Many programs provide a quick summary of their options:
+
+#v(0.2em)
+
+#term-center(terminal-frame(
+  ```bash
+  grep --help
+  ```,
+))
+
+#pause-gap(gap: 0.4em)
+
+For more detail, try the manual page:
+
+#v(0.2em)
+
+#term-center(terminal-frame(
+  ```bash
+  man grep
+  ```,
+))
+
+#pause-gap(gap: 0.4em)
+
+Not every program supports the same help options.
+
+Check the program's documentation when these don't work.
+
+== Use Your Shell's Shortcuts
+
+*Tab* completes a command or filename.
+
+*Ctrl+R* searches command history in many Bash and Zsh setups.
+
+Use #strong(sym.arrow.t) to revisit the previous command.
+
+#pause-gap()
+
+These shortcuts can save typing and help you reuse commands.
+
+== Be Careful with Commands That Change Things
+
+Commands can overwrite files, delete data, or affect more than you expect.
+
+#pause-gap()
+
+Before running an unfamiliar command:
+
+#pause
+
+#block(height: 4.6em, item-by-item[
+  - Read the command and its options.
+
+  - Check which files or directories it will affect.
+
+  - Try it first on sample data when possible.
+])
+
+
+== Don't Run Code You Haven't Inspected
+
+A command like this downloads a script and immediately runs it:
+
+#v(0.8em)
+
+#term-center(terminal-frame(
+  width: 95%,
+  ```bash
+  curl https://example.com/install.sh | sh
+  ```,
+))
+
+#pause-gap(gap: 1.4em)
+
+That means you run the downloaded code without reviewing it first.
+
+#pause-gap(gap: 1.4em)
+
+Prefer instructions from trusted sources, and inspect scripts before executing.
 
 = Helpful Resources
 
-// tldr.sh
-// cheat.sh (down?)
-// man pages / help / info
+== Where to Look Things Up
+
+#[
+  #set terms(indent: 1em, spacing: 1.5em)
+
+  / `--help`: a quick overview from a program.
+
+  / `man`: detailed manuals on many Unix-like systems.
+
+  / `tldr`: concise examples for common commands.
+
+  / Shell documentation: useful when syntax differs between shells.
+]
+
+#pause-gap()
+
+For example:
+
+#figure(
+  term-center(terminal-frame(
+    ```bash
+    tldr grep
+    ```,
+  )),
+  caption: [(_requires `tldr`; installed seperately_)],
+  supplement: none,
+)
+
+#focus-slide[Thanks!]
