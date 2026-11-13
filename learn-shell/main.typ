@@ -9,7 +9,27 @@
 #import "@preview/fletcher:0.5.8" as fletcher: edge, node
 #let fletcher-diagram = touying-reduce.with(fletcher)
 
+#import "@preview/codly:2.0.0" as codly
+#import "@preview/codly-languages:0.1.10": codly-languages
+
 #import "util.typ": command-diagram, encode-ansi, pinit-label, terms-right-align
+
+#show: codly.theme(
+  "clean",
+  fill: swat-colors.neutral-lightest.darken(5%),
+  header: (text: (fill: swat-colors.neutral-lightest)),
+  header-fill: rgb("#1f2328"),
+  radius: 5pt,
+)
+#show: codly.lang-set_(
+  languages: codly-languages.map(
+    c => (name: "" + h(-0.2em), icon: c.icon),
+  ),
+  fill: swat-colors.neutral-lightest,
+  radius: 0.4em,
+)
+
+#show raw.where(block: false): set text(size: 1.2em)
 
 #show: swat-doc.with(
   title: [Intro to Your Shell],
@@ -22,9 +42,15 @@
   ),
 )
 
-#show raw.where(block: false): set text(size: 1.2em)
-
 #let system = system.with(hostname: "ksu")
+
+#let system-ex01 = system(
+  files: (
+    "ideas.txt": read("ex01/ideas.txt"),
+    "meeting.txt": read("ex01/meeting.txt"),
+    "project.txt": read("ex01/project.txt"),
+  ),
+)
 
 #let terminal-ansi = (
   black: rgb("#24292f"),
@@ -178,13 +204,7 @@ You could open files one by one, checking manually. Or, you could ask the comput
 #pause-gap()
 
 #term-center(terminal-block(
-  system: system(
-    files: (
-      "ideas.txt": read("ex01/ideas.txt"),
-      "meeting.txt": read("ex01/meeting.txt"),
-      "project.txt": read("ex01/project.txt"),
-    ),
-  ),
+  system: system-ex01,
   width: 95%,
 )[
   ```bash
@@ -336,21 +356,20 @@ The double quotes keep the expanded path together as one argument.
 
 The shell can expand a pattern to matching filenames.
 
-#let frames = terminal-frames(
-  system: system(files: (
-    "notes.md": "",
-    "ideas.txt": read("ex01/ideas.txt"),
-    "meeting.txt": read("ex01/meeting.txt"),
-    "project.txt": read("ex01/project.txt"),
-  )),
-  // width: 95%,
-  height: 100%,
-  commands: ("ls", "echo *.txt", ""),
-  mode: "key-frames",
+#let frames = (
+  terminal-frames(
+    system: system(files: (
+      "notes.md": "",
+      ..system-ex01.files,
+    )),
+    // width: 95%,
+    height: 100%,
+    commands: ("ls", "echo *.txt", ""),
+    mode: "key-frames",
+  )
+    .map(term-center.with(height: 43%))
+    .slice(0, -1)
 )
-.map(term-center.with(height: 43%))
-.slice(0, -1)
-
 
 #alternatives(hide(frames.first()), ..frames)
 
@@ -852,7 +871,139 @@ This is *composition*: combining programs so that one's result becomes another's
 
 = Scripting
 
-// interpolation/subshells
+== From a command to a script
+
+A script is a file containing shell commands.
+
+#pause-gap(gap: 0.4em)
+
+Save a command we already know in `find-todos.sh`:
+
+#let frames(i) = layout(
+  size => terminal-frames(
+    width: size.width * 95%,
+    height: 100%,
+    commands: (
+      "echo \"grep TODO *.txt\" > find-todos.sh",
+      "bash find-todos.sh",
+      "",
+    ),
+    system: system-ex01,
+    mode: "key-frames",
+  )
+    .map(term-center.with(height: 60%))
+    .at(i),
+)
+
+// garbage code to work around a touying `alternatives-fn` bug
+#alternatives-match(
+  ("1": hide(frames(0)), ..range(4).map(i => (str(i + 2), frames(i))).to-dict()),
+)
+
+#v(0.6em)
+
+Then run the script with Bash.
+
+== Reuse values with variables
+
+Instead of repeating a value, store it in a variable:
+
+#pause-gap()
+
+#codly.new(
+  header: [find-todos-variable.sh],
+  raw(block: true, lang: "bash", read("scripts/find-todos-variable.sh")),
+)
+
+#pause-gap()
+
+The shell expands `"$search"` and `"$file"` before running `grep`.
+
+== Make a decision
+
+Use a conditional to do different things depending on whether a command succeeds.
+
+#codly.new(
+  header: [has-todos.sh],
+  raw(block: true, lang: "bash", read("scripts/has-todos.sh")),
+)
+
+#pause
+
+#term-center(
+  height: 42%,
+  terminal-block(
+    system: system(files: (
+      "has-todos.sh": read("scripts/has-todos.sh"),
+      "notes.md": "",
+      ..system-ex01.files,
+    )),
+    width: 100%,
+  )[
+    ```bash
+    bash has-todos.sh notes.md
+    bash has-todos.sh meeting.txt
+    ```
+  ],
+)
+
+== Repeat a task
+
+Use a loop to run a command for each matching file.
+
+#codly.new(
+  header: [repeat.sh],
+  raw(block: true, lang: "bash", read("scripts/repeat.sh")),
+)
+
+#pause-gap(gap: 0.6em)
+
+The loop repeats the commands inside it for each `.txt` file.
+
+#term-center(
+  height: 42%,
+  terminal-block(
+    system: system(files: (
+      "repeat.sh": ```bash
+      output=''
+      for file in *.txt; do
+        output+="$file TODO count: $(grep TODO "$file" | wc -l)"$'\n'
+      done
+      printf '%s' "$output"
+      ```.text,
+      "meeting.txt": system-ex01.files.at("meeting.txt"),
+      "project.txt": system-ex01.files.at("project.txt"),
+    )),
+    width: 100%,
+  )[
+    ```bash
+    bash repeat.sh
+    ```
+  ],
+)
+
+== Name a reusable step
+
+A function gives a name to a group of commands.
+
+#pause-gap(gap: 0.6em)
+
+#term-center(terminal-block(
+  system: system(files: ("meeting notes.txt": read("ex02/meeting notes.txt"))),
+  width: 95%,
+)[
+  ```bash
+  show-todos() {
+    grep TODO "$1"
+  }
+
+  show-todos "meeting notes.txt"
+  ```])
+
+#pause-gap(gap: 0.6em)
+
+Functions help organize scripts into named steps.
+
 // variables
 // control flow (conditionals, loops, functions)
 // composability
